@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>YU AI Video Fest — April 17</title>
+  <title>YU AI Video Fest — 17 Nisan</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,7 +31,6 @@
       cursor: none;
     }
 
-    /* CUSTOM CURSOR */
     .cursor {
       position: fixed; top: 0; left: 0;
       width: 12px; height: 12px;
@@ -45,7 +44,6 @@
     }
     .cursor.big { width: 40px; height: 40px; background: var(--pink); }
 
-    /* NOISE OVERLAY */
     body::before {
       content: '';
       position: fixed; inset: 0;
@@ -55,6 +53,46 @@
       z-index: 1000;
     }
 
+    /* ─── LANG SWITCHER ─── */
+    .lang-switcher {
+      position: fixed;
+      top: 1.6rem;
+      right: 4rem;
+      z-index: 600;
+      display: flex;
+      border: 1px solid rgba(255,255,255,.18);
+      overflow: hidden;
+    }
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: rgba(240,236,232,.45);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: .45rem 1rem;
+      cursor: none;
+      transition: background .2s, color .2s;
+    }
+    .lang-btn + .lang-btn { border-left: 1px solid rgba(255,255,255,.18); }
+    .lang-btn.active { background: var(--red); color: var(--light); }
+    .lang-btn:hover:not(.active) { color: var(--light); background: rgba(255,255,255,.06); }
+
+    /* Language content rules */
+    [data-lang] { display: none !important; }
+    body.lang-tr [data-lang="tr"] { display: block !important; }
+    body.lang-en [data-lang="en"] { display: block !important; }
+    /* inline overrides */
+    body.lang-tr span[data-lang="tr"],
+    body.lang-tr a[data-lang="tr"]  { display: inline !important; }
+    body.lang-en span[data-lang="en"],
+    body.lang-en a[data-lang="en"]  { display: inline !important; }
+    /* flex overrides */
+    body.lang-tr .flex-tr { display: flex !important; }
+    body.lang-en .flex-en { display: flex !important; }
+
     /* ─── HERO ─── */
     .hero {
       position: relative;
@@ -63,7 +101,6 @@
       grid-template-columns: 1fr 1fr;
       overflow: hidden;
     }
-
     .hero__bg {
       position: absolute; inset: 0;
       background:
@@ -71,23 +108,14 @@
         radial-gradient(ellipse 40% 60% at 80% 20%, rgba(62,207,206,.12) 0%, transparent 55%),
         radial-gradient(ellipse 50% 40% at 70% 80%, rgba(232,75,138,.10) 0%, transparent 50%);
     }
-
-    /* Animated scan lines */
     .hero__bg::after {
       content: '';
       position: absolute; inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 3px,
-        rgba(255,255,255,.015) 3px,
-        rgba(255,255,255,.015) 4px
-      );
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,.015) 3px, rgba(255,255,255,.015) 4px);
       animation: scanMove 8s linear infinite;
     }
-    @keyframes scanMove { from { background-position-y: 0; } to { background-position-y: 100vh; } }
+    @keyframes scanMove { from{background-position-y:0} to{background-position-y:100vh} }
 
-    /* Left: typographic date block */
     .hero__left {
       position: relative;
       display: flex;
@@ -96,12 +124,7 @@
       padding: 6vw 4vw 6vw 6vw;
       z-index: 2;
     }
-
-    .date-block {
-      line-height: .88;
-      position: relative;
-    }
-
+    .date-block { line-height: .88; }
     .date-num {
       font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(9rem, 18vw, 18rem);
@@ -110,630 +133,205 @@
       color: var(--light);
       letter-spacing: -.02em;
     }
-
-    .date-num.red   { color: var(--red); }
-    .date-num.orange{ color: var(--orange); }
-
-    /* Glitch effect on hover */
-    .date-num::before, .date-num::after {
+    .date-num.red    { color: var(--red); }
+    .date-num.orange { color: var(--orange); }
+    .date-num::before,.date-num::after {
       content: attr(data-text);
       position: absolute; top: 0; left: 0;
       width: 100%; height: 100%;
       font-family: inherit; font-size: inherit;
-      opacity: 0;
-      pointer-events: none;
+      opacity: 0; pointer-events: none;
     }
-    .date-num:hover::before {
-      color: var(--cyan);
-      clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
-      transform: translateX(calc(var(--glitch-offset) * -1));
-      opacity: 1;
-      animation: glitchA .3s steps(2) infinite;
-    }
-    .date-num:hover::after {
-      color: var(--pink);
-      clip-path: polygon(0 65%, 100% 65%, 100% 80%, 0 80%);
-      transform: translateX(var(--glitch-offset));
-      opacity: 1;
-      animation: glitchB .3s steps(2) infinite;
-    }
+    .date-num:hover::before { color:var(--cyan); clip-path:polygon(0 30%,100% 30%,100% 50%,0 50%); transform:translateX(-4px); opacity:1; animation:glitchA .3s steps(2) infinite; }
+    .date-num:hover::after  { color:var(--pink); clip-path:polygon(0 65%,100% 65%,100% 80%,0 80%); transform:translateX(4px);  opacity:1; animation:glitchB .3s steps(2) infinite; }
     @keyframes glitchA { 0%,100%{transform:translateX(-4px)} 50%{transform:translateX(4px)} }
     @keyframes glitchB { 0%,100%{transform:translateX(4px)}  50%{transform:translateX(-4px)} }
 
-    .fest-label {
-      margin-top: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .fest-label .ai-tag {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1.8rem, 3.5vw, 3rem);
-      background: linear-gradient(135deg, var(--red), var(--pink));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: .05em;
-    }
-    .fest-label .video-fest {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1rem, 2vw, 1.6rem);
-      letter-spacing: .2em;
-      color: var(--light);
-      opacity: .7;
-      line-height: 1.1;
-    }
+    .fest-label { margin-top:2rem; display:flex; align-items:center; gap:1rem; }
+    .ai-tag { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.8rem,3.5vw,3rem); background:linear-gradient(135deg,var(--red),var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:.05em; }
+    .video-fest { font-family:'Bebas Neue',sans-serif; font-size:clamp(1rem,2vw,1.6rem); letter-spacing:.2em; color:var(--light); opacity:.7; line-height:1.1; }
 
-    .hero__meta {
-      margin-top: 3rem;
-      display: flex;
-      flex-direction: column;
-      gap: .6rem;
-      font-size: clamp(.8rem, 1.2vw, 1rem);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      opacity: .6;
-    }
-    .hero__meta span { display: flex; align-items: center; gap: .5rem; }
-    .hero__meta em { color: var(--cyan); font-style: normal; }
+    .hero__meta { margin-top:3rem; display:flex; flex-direction:column; gap:.6rem; font-size:clamp(.8rem,1.2vw,1rem); letter-spacing:.08em; text-transform:uppercase; opacity:.6; }
+    .hero__meta .meta-row { display:flex; align-items:center; gap:.5rem; }
+    .hero__meta em { color:var(--cyan); font-style:normal; }
 
-    /* Right: face illustration using CSS + blend modes */
-    .hero__right {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      z-index: 2;
-    }
-
-    .face-container {
-      position: relative;
-      width: min(380px, 45vw);
-      height: min(550px, 70vh);
-    }
-
-    /* Main face silhouette */
-    .face-silhouette {
-      position: absolute; inset: 0;
-      background: linear-gradient(160deg, rgba(232,52,58,.6) 0%, rgba(62,207,206,.4) 40%, rgba(232,75,138,.5) 80%);
-      border-radius: 48% 52% 30% 70% / 60% 40% 60% 40%;
-      filter: blur(0px);
-      overflow: hidden;
-    }
-    .face-silhouette::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(220deg, rgba(245,200,66,.3) 0%, transparent 50%);
-      mix-blend-mode: screen;
-    }
-
-    /* Glitch bands inside face */
-    .glitch-band {
-      position: absolute;
-      width: 120%;
-      left: -10%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-      animation: bandMove 4s ease-in-out infinite;
-      opacity: .8;
-    }
-    .glitch-band:nth-child(2) { animation-delay: 1.5s; background: linear-gradient(90deg, transparent, var(--pink), transparent); }
-    .glitch-band:nth-child(3) { animation-delay: 3s; background: linear-gradient(90deg, transparent, var(--yellow), transparent); }
-    @keyframes bandMove {
-      0%   { top: 20%; opacity: 0; }
-      20%  { opacity: .8; }
-      80%  { opacity: .8; }
-      100% { top: 85%; opacity: 0; }
-    }
-
-    /* Floating color orbs */
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(30px);
-      mix-blend-mode: screen;
-      animation: orbFloat 6s ease-in-out infinite;
-    }
-    .orb-1 { width: 200px; height: 200px; background: var(--red);    top: -10%; left: -5%;  opacity: .5; }
-    .orb-2 { width: 150px; height: 150px; background: var(--cyan);   top: 20%;  right: -5%; opacity: .5; animation-delay: 2s; }
-    .orb-3 { width: 180px; height: 180px; background: var(--pink);   bottom: 0; left: 10%;  opacity: .45; animation-delay: 4s; }
-    .orb-4 { width: 120px; height: 120px; background: var(--yellow); top: 50%;  right: 10%; opacity: .4; animation-delay: 1s; }
-
-    @keyframes orbFloat {
-      0%,100% { transform: translateY(0) scale(1); }
-      50%      { transform: translateY(-20px) scale(1.05); }
-    }
+    .hero__right { position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; z-index:2; }
+    .face-container { position:relative; width:min(380px,45vw); height:min(550px,70vh); }
+    .face-silhouette { position:absolute; inset:0; background:linear-gradient(160deg,rgba(232,52,58,.6) 0%,rgba(62,207,206,.4) 40%,rgba(232,75,138,.5) 80%); border-radius:48% 52% 30% 70% / 60% 40% 60% 40%; overflow:hidden; }
+    .face-silhouette::before { content:''; position:absolute; inset:0; background:linear-gradient(220deg,rgba(245,200,66,.3) 0%,transparent 50%); mix-blend-mode:screen; }
+    .glitch-band { position:absolute; width:120%; left:-10%; height:2px; background:linear-gradient(90deg,transparent,var(--cyan),transparent); animation:bandMove 4s ease-in-out infinite; opacity:.8; }
+    .glitch-band:nth-child(2) { animation-delay:1.5s; background:linear-gradient(90deg,transparent,var(--pink),transparent); }
+    .glitch-band:nth-child(3) { animation-delay:3s;   background:linear-gradient(90deg,transparent,var(--yellow),transparent); }
+    @keyframes bandMove { 0%{top:20%;opacity:0} 20%{opacity:.8} 80%{opacity:.8} 100%{top:85%;opacity:0} }
+    .orb { position:absolute; border-radius:50%; filter:blur(30px); mix-blend-mode:screen; animation:orbFloat 6s ease-in-out infinite; }
+    .orb-1{width:200px;height:200px;background:var(--red);   top:-10%;left:-5%; opacity:.5}
+    .orb-2{width:150px;height:150px;background:var(--cyan);  top:20%;right:-5%;opacity:.5;animation-delay:2s}
+    .orb-3{width:180px;height:180px;background:var(--pink);  bottom:0;left:10%;opacity:.45;animation-delay:4s}
+    .orb-4{width:120px;height:120px;background:var(--yellow);top:50%;right:10%;opacity:.4;animation-delay:1s}
+    @keyframes orbFloat { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-20px) scale(1.05)} }
 
     /* ─── NAV ─── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 500;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.5rem 4rem;
-      background: linear-gradient(to bottom, rgba(10,10,15,.9), transparent);
-      backdrop-filter: blur(4px);
-    }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      letter-spacing: .15em;
-      color: var(--light);
-    }
-    .nav-logo span { color: var(--red); }
-
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a {
-      color: var(--light);
-      text-decoration: none;
-      font-size: .8rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      opacity: .6;
-      transition: opacity .2s, color .2s;
-    }
-    .nav-links a:hover { opacity: 1; color: var(--cyan); }
-
-    .nav-cta {
-      font-size: .8rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      border: 1px solid var(--red);
-      color: var(--red);
-      padding: .6rem 1.4rem;
-      text-decoration: none;
-      transition: background .2s, color .2s;
-    }
-    .nav-cta:hover { background: var(--red); color: var(--dark); }
+    nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; justify-content:space-between; padding:1.5rem 4rem; background:linear-gradient(to bottom,rgba(10,10,15,.9),transparent); backdrop-filter:blur(4px); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:.15em; color:var(--light); }
+    .nav-logo span { color:var(--red); }
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a { color:var(--light); text-decoration:none; font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; opacity:.6; transition:opacity .2s,color .2s; }
+    .nav-links a:hover { opacity:1; color:var(--cyan); }
+    .nav-cta { font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; border:1px solid var(--red); color:var(--red); padding:.6rem 1.4rem; text-decoration:none; transition:background .2s,color .2s; }
+    .nav-cta:hover { background:var(--red); color:var(--dark); }
 
     /* ─── MARQUEE ─── */
-    .marquee-bar {
-      background: var(--red);
-      overflow: hidden;
-      padding: .7rem 0;
-      position: relative;
-      z-index: 3;
-    }
-    .marquee-inner {
-      display: flex;
-      gap: 3rem;
-      white-space: nowrap;
-      animation: marqueeScroll 18s linear infinite;
-    }
-    .marquee-inner span {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem;
-      letter-spacing: .2em;
-      color: var(--dark);
-    }
-    .marquee-inner .dot { color: var(--dark); opacity: .5; }
-    @keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .marquee-bar { background:var(--red); overflow:hidden; padding:.7rem 0; position:relative; z-index:3; }
+    .marquee-inner { display:flex; gap:3rem; white-space:nowrap; animation:marqueeScroll 18s linear infinite; }
+    .marquee-inner span { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:.2em; color:var(--dark); }
+    .marquee-inner .dot { opacity:.5; }
+    @keyframes marqueeScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
     /* ─── ABOUT ─── */
-    .about {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 4rem;
-      padding: 8rem 6vw;
-      position: relative;
-    }
-    .about::before {
-      content: 'ABOUT';
-      position: absolute;
-      top: 4rem; right: 6vw;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 10rem;
-      color: var(--light);
-      opacity: .03;
-      pointer-events: none;
-      line-height: 1;
-    }
-
-    .section-tag {
-      font-size: .75rem;
-      letter-spacing: .25em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      margin-bottom: 1rem;
-    }
-
-    .about__heading {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      line-height: .95;
-      letter-spacing: .02em;
-    }
-    .about__heading em {
-      font-style: normal;
-      background: linear-gradient(135deg, var(--orange), var(--red));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .about__body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 1.5rem;
-    }
-    .about__body p {
-      font-size: clamp(.9rem, 1.2vw, 1.05rem);
-      line-height: 1.75;
-      color: rgba(240,236,232,.65);
-    }
+    .about { display:grid; grid-template-columns:1fr 1.4fr; gap:4rem; padding:8rem 6vw; position:relative; }
+    .section-tag { font-size:.75rem; letter-spacing:.25em; text-transform:uppercase; color:var(--cyan); margin-bottom:1rem; }
+    .about__heading { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,5vw,4.5rem); line-height:.95; letter-spacing:.02em; }
+    .about__heading em { font-style:normal; background:linear-gradient(135deg,var(--orange),var(--red)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .about__body { display:flex; flex-direction:column; justify-content:center; gap:1.5rem; }
+    .about__body p { font-size:clamp(.9rem,1.2vw,1.05rem); line-height:1.75; color:rgba(240,236,232,.65); }
 
     /* ─── PROGRAM ─── */
-    .program {
-      padding: 8rem 6vw;
-      background: var(--mid);
-      position: relative;
-    }
-    .program__header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 4rem;
-    }
-    .program__title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 7vw, 6rem);
-      line-height: 1;
-      letter-spacing: .03em;
-    }
-    .program__title em {
-      display: block;
-      font-style: normal;
-      color: var(--orange);
-    }
-
-    .program-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: rgba(255,255,255,.07);
-    }
-    .program-card {
-      background: var(--mid);
-      padding: 2.5rem 2rem;
-      position: relative;
-      overflow: hidden;
-      transition: background .3s;
-    }
-    .program-card:hover { background: rgba(255,255,255,.04); }
-    .program-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 3px; height: 0;
-      background: linear-gradient(to bottom, var(--card-accent), transparent);
-      transition: height .4s ease;
-    }
-    .program-card:hover::before { height: 100%; }
-
-    .program-card.c1 { --card-accent: var(--red); }
-    .program-card.c2 { --card-accent: var(--cyan); }
-    .program-card.c3 { --card-accent: var(--orange); }
-    .program-card.c4 { --card-accent: var(--pink); }
-    .program-card.c5 { --card-accent: var(--yellow); }
-    .program-card.c6 { --card-accent: var(--cyan); }
-
-    .card-icon {
-      font-size: 1.6rem;
-      margin-bottom: 1.2rem;
-      display: block;
-    }
-    .card-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: .06em;
-      margin-bottom: .6rem;
-    }
-    .card-desc {
-      font-size: .85rem;
-      line-height: 1.65;
-      color: rgba(240,236,232,.5);
-    }
+    .program { padding:8rem 6vw; background:var(--mid); }
+    .program__header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:4rem; }
+    .program__title { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,7vw,6rem); line-height:1; letter-spacing:.03em; }
+    .program__title em { display:block; font-style:normal; color:var(--orange); }
+    .program-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(255,255,255,.07); }
+    .program-card { background:var(--mid); padding:2.5rem 2rem; position:relative; overflow:hidden; transition:background .3s; }
+    .program-card:hover { background:rgba(255,255,255,.04); }
+    .program-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:0; background:linear-gradient(to bottom,var(--card-accent),transparent); transition:height .4s ease; }
+    .program-card:hover::before { height:100%; }
+    .program-card.c1{--card-accent:var(--red)} .program-card.c2{--card-accent:var(--cyan)} .program-card.c3{--card-accent:var(--orange)}
+    .program-card.c4{--card-accent:var(--pink)} .program-card.c5{--card-accent:var(--yellow)} .program-card.c6{--card-accent:var(--cyan)}
+    .card-icon { font-size:1.6rem; margin-bottom:1.2rem; display:block; }
+    .card-title { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.06em; margin-bottom:.6rem; }
+    .card-desc { font-size:.85rem; line-height:1.65; color:rgba(240,236,232,.5); }
 
     /* ─── INFO STRIP ─── */
-    .info-strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      background: var(--red);
-    }
-    .info-item {
-      padding: 3rem 3vw;
-      border-right: 1px solid rgba(10,10,15,.2);
-      display: flex;
-      flex-direction: column;
-      gap: .4rem;
-    }
-    .info-item:last-child { border-right: none; }
-    .info-label {
-      font-size: .7rem;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: rgba(10,10,15,.6);
-      font-weight: 500;
-    }
-    .info-value {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1.4rem, 2.5vw, 2rem);
-      color: var(--dark);
-      letter-spacing: .04em;
-      line-height: 1.1;
-    }
+    .info-strip { display:grid; grid-template-columns:repeat(3,1fr); background:var(--red); }
+    .info-item { padding:3rem 3vw; border-right:1px solid rgba(10,10,15,.2); display:flex; flex-direction:column; gap:.4rem; }
+    .info-item:last-child { border-right:none; }
+    .info-label { font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(10,10,15,.6); font-weight:500; }
+    .info-value { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.4rem,2.5vw,2rem); color:var(--dark); letter-spacing:.04em; line-height:1.1; }
 
     /* ─── HIGHLIGHTS ─── */
-    .highlights {
-      padding: 8rem 6vw;
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 6rem;
-      align-items: center;
-    }
-
-    .highlight-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-    .highlight-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1.5rem;
-      padding: 2rem 0;
-      border-bottom: 1px solid rgba(255,255,255,.07);
-      cursor: default;
-      transition: padding-left .3s;
-    }
-    .highlight-item:hover { padding-left: .5rem; }
-    .highlight-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3rem;
-      color: var(--red);
-      line-height: 1;
-      flex-shrink: 0;
-      width: 3rem;
-      opacity: .5;
-      transition: opacity .3s;
-    }
-    .highlight-item:hover .highlight-num { opacity: 1; }
-    .highlight-text h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      letter-spacing: .06em;
-      margin-bottom: .4rem;
-    }
-    .highlight-text p {
-      font-size: .85rem;
-      line-height: 1.65;
-      color: rgba(240,236,232,.5);
-    }
-
-    .highlights__aside {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-    .aside-badge {
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.1);
-      padding: 2rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .aside-badge::after {
-      content: '';
-      position: absolute;
-      top: 0; right: 0;
-      width: 80px; height: 80px;
-      background: var(--badge-color, var(--red));
-      opacity: .15;
-      clip-path: polygon(100% 0, 0 0, 100% 100%);
-    }
-    .aside-badge h4 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.2rem;
-      letter-spacing: .08em;
-      margin-bottom: .5rem;
-      color: var(--badge-color, var(--red));
-    }
-    .aside-badge p {
-      font-size: .85rem;
-      line-height: 1.6;
-      color: rgba(240,236,232,.55);
-    }
-    .aside-badge.b1 { --badge-color: var(--cyan); }
-    .aside-badge.b2 { --badge-color: var(--orange); }
-    .aside-badge.b3 { --badge-color: var(--pink); }
+    .highlights { padding:8rem 6vw; display:grid; grid-template-columns:1.2fr 1fr; gap:6rem; align-items:center; }
+    .highlight-list { display:flex; flex-direction:column; }
+    .highlight-item { display:flex; align-items:flex-start; gap:1.5rem; padding:2rem 0; border-bottom:1px solid rgba(255,255,255,.07); cursor:default; transition:padding-left .3s; }
+    .highlight-item:hover { padding-left:.5rem; }
+    .highlight-num { font-family:'Bebas Neue',sans-serif; font-size:3rem; color:var(--red); line-height:1; flex-shrink:0; width:3rem; opacity:.5; transition:opacity .3s; }
+    .highlight-item:hover .highlight-num { opacity:1; }
+    .highlight-text h3 { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:.06em; margin-bottom:.4rem; }
+    .highlight-text p { font-size:.85rem; line-height:1.65; color:rgba(240,236,232,.5); }
+    .highlights__aside { display:flex; flex-direction:column; gap:2rem; }
+    .aside-badge { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); padding:2rem; position:relative; overflow:hidden; }
+    .aside-badge::after { content:''; position:absolute; top:0; right:0; width:80px; height:80px; background:var(--badge-color,var(--red)); opacity:.15; clip-path:polygon(100% 0,0 0,100% 100%); }
+    .aside-badge h4 { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:.08em; margin-bottom:.5rem; color:var(--badge-color,var(--red)); }
+    .aside-badge p { font-size:.85rem; line-height:1.6; color:rgba(240,236,232,.55); }
+    .aside-badge.b1{--badge-color:var(--cyan)} .aside-badge.b2{--badge-color:var(--orange)} .aside-badge.b3{--badge-color:var(--pink)}
 
     /* ─── PARTNERS ─── */
-    .partners {
-      padding: 5rem 6vw;
-      background: var(--mid);
-      text-align: center;
-    }
-    .partners h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1.5rem, 3vw, 2.5rem);
-      letter-spacing: .15em;
-      margin-bottom: 3rem;
-      opacity: .4;
-    }
-    .partners-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 3rem;
-      flex-wrap: wrap;
-    }
-    .partner-chip {
-      border: 1px solid rgba(255,255,255,.12);
-      padding: .8rem 2rem;
-      font-size: .8rem;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: rgba(240,236,232,.5);
-      transition: border-color .3s, color .3s;
-    }
-    .partner-chip:hover { border-color: var(--cyan); color: var(--cyan); }
+    .partners { padding:5rem 6vw; background:var(--mid); text-align:center; }
+    .partners h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.5rem,3vw,2.5rem); letter-spacing:.15em; margin-bottom:3rem; opacity:.4; }
+    .partners-row { display:flex; justify-content:center; align-items:center; gap:3rem; flex-wrap:wrap; }
+    .partner-chip { border:1px solid rgba(255,255,255,.12); padding:.8rem 2rem; font-size:.8rem; letter-spacing:.15em; text-transform:uppercase; color:rgba(240,236,232,.5); transition:border-color .3s,color .3s; }
+    .partner-chip:hover { border-color:var(--cyan); color:var(--cyan); }
 
     /* ─── CTA ─── */
-    .cta-section {
-      padding: 10rem 6vw;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .cta-section::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 60% 60% at 50% 50%, rgba(232,52,58,.15) 0%, transparent 70%);
-    }
-    .cta-section h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 8vw, 8rem);
-      line-height: .9;
-      letter-spacing: .02em;
-      position: relative;
-    }
-    .cta-section h2 span { display: block; }
-    .cta-section h2 .accent {
-      background: linear-gradient(135deg, var(--orange), var(--pink));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .cta-free {
-      margin-top: 1.5rem;
-      font-size: clamp(.9rem, 1.5vw, 1.1rem);
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      position: relative;
-    }
-
-    .cta-btn {
-      display: inline-block;
-      margin-top: 3rem;
-      padding: 1.2rem 4rem;
-      background: var(--red);
-      color: var(--light);
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem;
-      letter-spacing: .15em;
-      text-decoration: none;
-      position: relative;
-      overflow: hidden;
-      transition: transform .2s;
-    }
-    .cta-btn::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: var(--orange);
-      transform: translateX(-100%);
-      transition: transform .3s ease;
-    }
-    .cta-btn:hover { transform: translateY(-2px); }
-    .cta-btn:hover::before { transform: translateX(0); }
-    .cta-btn span { position: relative; }
+    .cta-section { padding:10rem 6vw; text-align:center; position:relative; overflow:hidden; }
+    .cta-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(232,52,58,.15) 0%,transparent 70%); }
+    .cta-section h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,8vw,8rem); line-height:.9; letter-spacing:.02em; position:relative; }
+    .cta-section h2 span { display:block; }
+    .cta-section h2 .accent { background:linear-gradient(135deg,var(--orange),var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .cta-free { margin-top:1.5rem; font-size:clamp(.9rem,1.5vw,1.1rem); letter-spacing:.2em; text-transform:uppercase; color:var(--cyan); position:relative; }
+    .cta-btn { display:inline-block; margin-top:3rem; padding:1.2rem 4rem; background:var(--red); color:var(--light); font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:.15em; text-decoration:none; position:relative; overflow:hidden; transition:transform .2s; }
+    .cta-btn::before { content:''; position:absolute; inset:0; background:var(--orange); transform:translateX(-100%); transition:transform .3s ease; }
+    .cta-btn:hover { transform:translateY(-2px); }
+    .cta-btn:hover::before { transform:translateX(0); }
+    .cta-btn span { position:relative; }
 
     /* ─── FOOTER ─── */
-    footer {
-      background: #060608;
-      padding: 2.5rem 6vw;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: .75rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: rgba(240,236,232,.3);
-    }
-    footer a { color: rgba(240,236,232,.3); text-decoration: none; transition: color .2s; }
-    footer a:hover { color: var(--cyan); }
+    footer { background:#060608; padding:2.5rem 6vw; display:flex; justify-content:space-between; align-items:center; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:rgba(240,236,232,.3); }
+    footer a { color:rgba(240,236,232,.3); text-decoration:none; transition:color .2s; }
+    footer a:hover { color:var(--cyan); }
 
-    /* ─── ENTRANCE ANIMATIONS ─── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .reveal-delay-1 { transition-delay: .1s; }
-    .reveal-delay-2 { transition-delay: .2s; }
-    .reveal-delay-3 { transition-delay: .3s; }
+    /* ─── REVEAL ─── */
+    .reveal { opacity:0; transform:translateY(30px); transition:opacity .7s ease,transform .7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-delay-1{transition-delay:.1s} .reveal-delay-2{transition-delay:.2s} .reveal-delay-3{transition-delay:.3s}
 
     /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
-      nav { padding: 1.2rem 2rem; }
-      .nav-links { display: none; }
-      .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 5rem; }
-      .hero__right { display: none; }
-      .about, .highlights { grid-template-columns: 1fr; gap: 3rem; }
-      .program-grid { grid-template-columns: 1fr 1fr; }
-      .info-strip { grid-template-columns: 1fr; }
-      .info-item { border-right: none; border-bottom: 1px solid rgba(10,10,15,.2); }
-      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    @media(max-width:900px){
+      nav{padding:1.2rem 2rem}
+      .nav-links{display:none}
+      .lang-switcher{right:2rem; top:1.2rem}
+      .hero{grid-template-columns:1fr;min-height:auto;padding-top:5rem}
+      .hero__right{display:none}
+      .about,.highlights{grid-template-columns:1fr;gap:3rem}
+      .program-grid{grid-template-columns:1fr 1fr}
+      .info-strip{grid-template-columns:1fr}
+      .info-item{border-right:none;border-bottom:1px solid rgba(10,10,15,.2)}
+      footer{flex-direction:column;gap:1rem;text-align:center}
     }
-    @media (max-width: 600px) {
-      .program-grid { grid-template-columns: 1fr; }
-      .partners-row { gap: 1rem; }
+    @media(max-width:600px){
+      .program-grid{grid-template-columns:1fr}
+      .partners-row{gap:1rem}
     }
   </style>
 </head>
-<body>
+<body class="lang-tr">
 
   <div class="cursor" id="cursor"></div>
+
+  <!-- LANG SWITCHER -->
+  <div class="lang-switcher">
+    <button class="lang-btn active" id="btn-tr" onclick="setLang('tr')">TR</button>
+    <button class="lang-btn"        id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
 
   <!-- NAV -->
   <nav>
     <div class="nav-logo">YU <span>AI</span> FEST</div>
     <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#program">Program</a></li>
-      <li><a href="#highlights">Highlights</a></li>
-      <li><a href="#partners">Partners</a></li>
+      <li><a href="#about">  <span data-lang="tr">Hakkında</span>     <span data-lang="en">About</span></a></li>
+      <li><a href="#program"><span data-lang="tr">Program</span>       <span data-lang="en">Program</span></a></li>
+      <li><a href="#highlights"><span data-lang="tr">Öne Çıkanlar</span><span data-lang="en">Highlights</span></a></li>
+      <li><a href="#partners"><span data-lang="tr">Paydaşlar</span>    <span data-lang="en">Partners</span></a></li>
     </ul>
-    <a href="#cta" class="nav-cta">Free Entry</a>
+    <a href="#cta" class="nav-cta">
+      <span data-lang="tr">Ücretsiz Giriş</span>
+      <span data-lang="en">Free Entry</span>
+    </a>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
     <div class="hero__bg"></div>
-
     <div class="hero__left">
       <div class="date-block">
-        <span class="date-num red" data-text="17">17</span>
+        <span class="date-num red"    data-text="17">17</span>
         <span class="date-num orange" data-text="04">04</span>
-        <span class="date-num" data-text="26">26</span>
+        <span class="date-num"        data-text="26">26</span>
       </div>
       <div class="fest-label">
         <div class="ai-tag">AI Video Fest</div>
         <div class="video-fest">Yaşar<br>University</div>
       </div>
       <div class="hero__meta">
-        <span>📍 <em>UrlaDAM</em>, İzmir</span>
-        <span>🗓 April 17, 2025 &nbsp;·&nbsp; <em>11:00 – 21:00</em></span>
-        <span>🎟 <em>Free</em> Admission</span>
+        <div class="meta-row">📍 <em>UrlaDAM</em>, İzmir</div>
+        <div class="meta-row" data-lang="tr">🗓 17 Nisan 2025 &nbsp;·&nbsp; <em>11:00 – 21:00</em></div>
+        <div class="meta-row" data-lang="en">🗓 April 17, 2025 &nbsp;·&nbsp; <em>11:00 – 21:00</em></div>
+        <div class="meta-row" data-lang="tr">🎟 <em>Ücretsiz</em> Giriş</div>
+        <div class="meta-row" data-lang="en">🎟 <em>Free</em> Admission</div>
       </div>
     </div>
-
     <div class="hero__right">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-      <div class="orb orb-4"></div>
+      <div class="orb orb-1"></div><div class="orb orb-2"></div>
+      <div class="orb orb-3"></div><div class="orb orb-4"></div>
       <div class="face-container">
         <div class="face-silhouette">
           <div class="glitch-band"></div>
@@ -745,62 +343,67 @@
   </section>
 
   <!-- MARQUEE -->
-  <div class="marquee-bar" aria-hidden="true">
+  <div class="marquee-bar" data-lang="tr" aria-hidden="true">
     <div class="marquee-inner">
-      <span>AI VIDEO FEST</span><span class="dot">◆</span>
-      <span>APRIL 17</span><span class="dot">◆</span>
-      <span>URLAD AM İZMİR</span><span class="dot">◆</span>
-      <span>FREE ADMISSION</span><span class="dot">◆</span>
-      <span>PANELS</span><span class="dot">◆</span>
-      <span>WORKSHOPS</span><span class="dot">◆</span>
-      <span>SCREENINGS</span><span class="dot">◆</span>
-      <span>AR / VR</span><span class="dot">◆</span>
-      <span>AI VIDEO FEST</span><span class="dot">◆</span>
-      <span>APRIL 17</span><span class="dot">◆</span>
-      <span>URLAD AM İZMİR</span><span class="dot">◆</span>
-      <span>FREE ADMISSION</span><span class="dot">◆</span>
-      <span>PANELS</span><span class="dot">◆</span>
-      <span>WORKSHOPS</span><span class="dot">◆</span>
-      <span>SCREENINGS</span><span class="dot">◆</span>
-      <span>AR / VR</span><span class="dot">◆</span>
+      <span>AI VIDEO FEST</span><span class="dot">◆</span><span>17 NİSAN</span><span class="dot">◆</span>
+      <span>URLAD AM İZMİR</span><span class="dot">◆</span><span>ÜCRETSİZ GİRİŞ</span><span class="dot">◆</span>
+      <span>PANELLER</span><span class="dot">◆</span><span>ATÖLYELER</span><span class="dot">◆</span>
+      <span>GÖSTERIMLER</span><span class="dot">◆</span><span>AR / VR</span><span class="dot">◆</span>
+      <span>AI VIDEO FEST</span><span class="dot">◆</span><span>17 NİSAN</span><span class="dot">◆</span>
+      <span>URLAD AM İZMİR</span><span class="dot">◆</span><span>ÜCRETSİZ GİRİŞ</span><span class="dot">◆</span>
+      <span>PANELLER</span><span class="dot">◆</span><span>ATÖLYELER</span><span class="dot">◆</span>
+      <span>GÖSTERIMLER</span><span class="dot">◆</span><span>AR / VR</span><span class="dot">◆</span>
+    </div>
+  </div>
+  <div class="marquee-bar" data-lang="en" aria-hidden="true">
+    <div class="marquee-inner">
+      <span>AI VIDEO FEST</span><span class="dot">◆</span><span>APRIL 17</span><span class="dot">◆</span>
+      <span>URLAD AM İZMİR</span><span class="dot">◆</span><span>FREE ADMISSION</span><span class="dot">◆</span>
+      <span>PANELS</span><span class="dot">◆</span><span>WORKSHOPS</span><span class="dot">◆</span>
+      <span>SCREENINGS</span><span class="dot">◆</span><span>AR / VR</span><span class="dot">◆</span>
+      <span>AI VIDEO FEST</span><span class="dot">◆</span><span>APRIL 17</span><span class="dot">◆</span>
+      <span>URLAD AM İZMİR</span><span class="dot">◆</span><span>FREE ADMISSION</span><span class="dot">◆</span>
+      <span>PANELS</span><span class="dot">◆</span><span>WORKSHOPS</span><span class="dot">◆</span>
+      <span>SCREENINGS</span><span class="dot">◆</span><span>AR / VR</span><span class="dot">◆</span>
     </div>
   </div>
 
   <!-- ABOUT -->
   <section class="about" id="about">
     <div class="reveal">
-      <p class="section-tag">About the Festival</p>
-      <h2 class="about__heading">
-        The New<br>
-        <em>Frontiers</em><br>
-        of Creation
-      </h2>
+      <p class="section-tag">
+        <span data-lang="tr">Festival Hakkında</span>
+        <span data-lang="en">About the Festival</span>
+      </p>
+      <h2 class="about__heading" data-lang="tr">Yaratıcılığın<br><em>Yeni</em><br>Sınırları</h2>
+      <h2 class="about__heading" data-lang="en">The New<br><em>Frontiers</em><br>of Creation</h2>
     </div>
     <div class="about__body reveal reveal-delay-1">
-      <p>
-        The YU AI Video Fest explores the new frontiers that AI-powered video production is opening up in the creative industries — bringing together technologists, filmmakers, educators, and students for a full day of discovery.
-      </p>
-      <p>
-        Organized in collaboration with Yaşar University's Department of New Media and Communication and UrlaDAM, the festival examines the impact of AI on advertising, cinema, and creative production through panels, workshops, and screenings.
-      </p>
-      <p>
-        With support from the İzmir Innovation Platform and the İzmir Metropolitan Municipality, the day features awards designed to encourage young creators alongside inspiring networking opportunities.
-      </p>
+      <div data-lang="tr">
+        <p>YU AI Video Fest; yapay zeka destekli video üretiminin yaratıcı endüstrilerde açtığı yeni ufukları keşfetmek için teknoloji uzmanlarını, sinemacıları, eğitimcileri ve öğrencileri bir araya getiriyor.</p>
+        <p style="margin-top:1.5rem">Yaşar Üniversitesi Yeni Medya ve İletişim Bölümü ile UrlaDAM iş birliğiyle düzenlenen festival; panel, atölye ve gösterimler aracılığıyla yapay zekanın reklamcılık, sinema ve yaratıcı üretim üzerindeki etkisini masaya yatırıyor.</p>
+        <p style="margin-top:1.5rem">İzmir İnovasyon Platformu ve İzmir Büyükşehir Belediyesi'nin desteğiyle gerçekleşen etkinlikte, genç yaratıcıları teşvik eden ödüller ve ilham verici networking fırsatları da yer alıyor.</p>
+      </div>
+      <div data-lang="en">
+        <p>The YU AI Video Fest explores the new frontiers that AI-powered video production is opening up in the creative industries — bringing together technologists, filmmakers, educators, and students for a full day of discovery.</p>
+        <p style="margin-top:1.5rem">Organized in collaboration with Yaşar University's Department of New Media and Communication and UrlaDAM, the festival examines the impact of AI on advertising, cinema, and creative production through panels, workshops, and screenings.</p>
+        <p style="margin-top:1.5rem">With support from the İzmir Innovation Platform and the İzmir Metropolitan Municipality, the day features awards designed to encourage young creators alongside inspiring networking opportunities.</p>
+      </div>
     </div>
   </section>
 
   <!-- INFO STRIP -->
   <div class="info-strip">
     <div class="info-item">
-      <span class="info-label">Date</span>
-      <span class="info-value">Thursday, April 17, 2025</span>
+      <span class="info-label"><span data-lang="tr">Tarih</span><span data-lang="en">Date</span></span>
+      <span class="info-value"><span data-lang="tr">17 Nisan 2025, Perşembe</span><span data-lang="en">Thursday, April 17, 2025</span></span>
     </div>
     <div class="info-item">
-      <span class="info-label">Hours</span>
-      <span class="info-value">11:00 AM — 9:00 PM</span>
+      <span class="info-label"><span data-lang="tr">Saatler</span><span data-lang="en">Hours</span></span>
+      <span class="info-value">11:00 — 21:00</span>
     </div>
     <div class="info-item">
-      <span class="info-label">Location</span>
+      <span class="info-label"><span data-lang="tr">Konum</span><span data-lang="en">Location</span></span>
       <span class="info-value">UrlaDAM, İzmir</span>
     </div>
   </div>
@@ -809,41 +412,43 @@
   <section class="program" id="program">
     <div class="program__header reveal">
       <div>
-        <p class="section-tag">What's On</p>
-        <h2 class="program__title">Full Day<br><em>Program</em></h2>
+        <p class="section-tag"><span data-lang="tr">Neler Var</span><span data-lang="en">What's On</span></p>
+        <h2 class="program__title">
+          <span data-lang="tr">Dolu Dolu<br></span><span data-lang="en">Full Day<br></span>
+          <em><span data-lang="tr">Program</span><span data-lang="en">Program</span></em>
+        </h2>
       </div>
     </div>
-
     <div class="program-grid">
       <div class="program-card c1 reveal">
         <span class="card-icon">🎙</span>
-        <div class="card-title">Panels</div>
-        <p class="card-desc">Industry leaders discuss AI's transformative role in advertising, cinema, and creative production.</p>
+        <div class="card-title"><span data-lang="tr">Paneller</span><span data-lang="en">Panels</span></div>
+        <p class="card-desc"><span data-lang="tr">Sektör liderleri yapay zekanın reklamcılık, sinema ve yaratıcı üretimdeki dönüştürücü rolünü ele alıyor.</span><span data-lang="en">Industry leaders discuss AI's transformative role in advertising, cinema, and creative production.</span></p>
       </div>
       <div class="program-card c2 reveal reveal-delay-1">
         <span class="card-icon">🛠</span>
-        <div class="card-title">Workshops</div>
-        <p class="card-desc">Hands-on sessions led by practitioners. Learn, build, and experiment with cutting-edge AI tools.</p>
+        <div class="card-title"><span data-lang="tr">Atölyeler</span><span data-lang="en">Workshops</span></div>
+        <p class="card-desc"><span data-lang="tr">Uygulayıcılar tarafından yürütülen pratik oturumlar. En güncel yapay zeka araçlarını öğren, dene ve keşfet.</span><span data-lang="en">Hands-on sessions led by practitioners. Learn, build, and experiment with cutting-edge AI tools.</span></p>
       </div>
       <div class="program-card c3 reveal reveal-delay-2">
         <span class="card-icon">🎬</span>
-        <div class="card-title">Screenings</div>
-        <p class="card-desc">A curated selection of AI-generated videos from Turkey — short films, ads, and experimental works.</p>
+        <div class="card-title"><span data-lang="tr">Gösterimler</span><span data-lang="en">Screenings</span></div>
+        <p class="card-desc"><span data-lang="tr">Türkiye'den seçilmiş yapay zeka üretimi videolar — kısa filmler, reklamlar ve deneysel çalışmalar.</span><span data-lang="en">A curated selection of AI-generated videos from Turkey — short films, ads, and experimental works.</span></p>
       </div>
       <div class="program-card c4 reveal">
         <span class="card-icon">🥽</span>
-        <div class="card-title">AR / VR Experiences</div>
-        <p class="card-desc">Immersive and extended-reality installations that push the boundaries of storytelling.</p>
+        <div class="card-title"><span data-lang="tr">AR / VR Deneyimler</span><span data-lang="en">AR / VR Experiences</span></div>
+        <p class="card-desc"><span data-lang="tr">Hikaye anlatımının sınırlarını zorlayan sürükleyici ve genişletilmiş gerçeklik kurulumları.</span><span data-lang="en">Immersive and extended-reality installations that push the boundaries of storytelling.</span></p>
       </div>
       <div class="program-card c5 reveal reveal-delay-1">
         <span class="card-icon">🎓</span>
-        <div class="card-title">Student Showcase</div>
-        <p class="card-desc">Projects by the next generation of creators — raw, ambitious, and AI-powered.</p>
+        <div class="card-title"><span data-lang="tr">Öğrenci Sergisi</span><span data-lang="en">Student Showcase</span></div>
+        <p class="card-desc"><span data-lang="tr">Yeni nesil yaratıcıların projeleri — ham, iddialı ve yapay zeka destekli.</span><span data-lang="en">Projects by the next generation of creators — raw, ambitious, and AI-powered.</span></p>
       </div>
       <div class="program-card c6 reveal reveal-delay-2">
         <span class="card-icon">🏆</span>
-        <div class="card-title">Awards</div>
-        <p class="card-desc">Recognition for outstanding young creators pushing the frontiers of AI video production.</p>
+        <div class="card-title"><span data-lang="tr">Ödüller</span><span data-lang="en">Awards</span></div>
+        <p class="card-desc"><span data-lang="tr">Yapay zeka video üretiminin sınırlarını zorlayan genç yaratıcılara özel tanınma ödülleri.</span><span data-lang="en">Recognition for outstanding young creators pushing the frontiers of AI video production.</span></p>
       </div>
     </div>
   </section>
@@ -851,84 +456,110 @@
   <!-- HIGHLIGHTS -->
   <section class="highlights" id="highlights">
     <div class="highlight-list reveal">
-      <p class="section-tag" style="margin-bottom:2rem">Why Attend</p>
+      <p class="section-tag" style="margin-bottom:2rem">
+        <span data-lang="tr">Neden Katılmalısın</span>
+        <span data-lang="en">Why Attend</span>
+      </p>
       <div class="highlight-item">
         <div class="highlight-num">01</div>
         <div class="highlight-text">
-          <h3>See Turkey's Best AI Videos</h3>
-          <p>A curated showcase of the most innovative AI-generated video work produced in Turkey, in one place.</p>
+          <h3><span data-lang="tr">Türkiye'nin En İyi AI Videolarını İzle</span><span data-lang="en">See Turkey's Best AI Videos</span></h3>
+          <p><span data-lang="tr">Türkiye'de üretilmiş en yenilikçi yapay zeka destekli video çalışmaları tek bir çatı altında.</span><span data-lang="en">A curated showcase of the most innovative AI-generated video work produced in Turkey, in one place.</span></p>
         </div>
       </div>
       <div class="highlight-item">
         <div class="highlight-num">02</div>
         <div class="highlight-text">
-          <h3>Meet the Industry</h3>
-          <p>Connect with professionals from advertising, film, and tech. Real networking, real conversations.</p>
+          <h3><span data-lang="tr">Sektörle Tanış</span><span data-lang="en">Meet the Industry</span></h3>
+          <p><span data-lang="tr">Reklamcılık, film ve teknoloji alanlarından profesyonellerle bağlantı kur. Gerçek networking, gerçek sohbetler.</span><span data-lang="en">Connect with professionals from advertising, film, and tech. Real networking, real conversations.</span></p>
         </div>
       </div>
       <div class="highlight-item">
         <div class="highlight-num">03</div>
         <div class="highlight-text">
-          <h3>Hands-On Learning</h3>
-          <p>Leave with new skills from practical workshops. No prior experience required — just curiosity.</p>
+          <h3><span data-lang="tr">Uygulamalı Öğrenme</span><span data-lang="en">Hands-On Learning</span></h3>
+          <p><span data-lang="tr">Pratik atölyelerden yeni becerilerle ayrıl. Ön deneyim gerekmez — yalnızca merak yeterli.</span><span data-lang="en">Leave with new skills from practical workshops. No prior experience required — just curiosity.</span></p>
         </div>
       </div>
       <div class="highlight-item">
         <div class="highlight-num">04</div>
         <div class="highlight-text">
-          <h3>Completely Free</h3>
-          <p>No ticket price, no catch. Open to everyone with a passion for creativity and technology.</p>
+          <h3><span data-lang="tr">Tamamen Ücretsiz</span><span data-lang="en">Completely Free</span></h3>
+          <p><span data-lang="tr">Bilet ücreti yok, gizli koşul yok. Yaratıcılık ve teknolojiye ilgi duyan herkese açık.</span><span data-lang="en">No ticket price, no catch. Open to everyone with a passion for creativity and technology.</span></p>
         </div>
       </div>
     </div>
-
     <div class="highlights__aside reveal reveal-delay-2">
       <div class="aside-badge b1">
-        <h4>Technology</h4>
-        <p>From generative video to immersive AR/VR — experience the tools reshaping how stories are told.</p>
+        <h4><span data-lang="tr">Teknoloji</span><span data-lang="en">Technology</span></h4>
+        <p><span data-lang="tr">Üretken videodan sürükleyici AR/VR'a — hikayelerin anlatılma biçimini yeniden şekillendiren araçları deneyimle.</span><span data-lang="en">From generative video to immersive AR/VR — experience the tools reshaping how stories are told.</span></p>
       </div>
       <div class="aside-badge b2">
-        <h4>Creativity</h4>
-        <p>A day built around imagination. See what happens when artists and AI collaborate without limits.</p>
+        <h4><span data-lang="tr">Yaratıcılık</span><span data-lang="en">Creativity</span></h4>
+        <p><span data-lang="tr">Hayal gücünün merkezde olduğu bir gün. Sanatçılar ve yapay zeka sınırsız bir şekilde iş birliği yaptığında ne olduğunu gör.</span><span data-lang="en">A day built around imagination. See what happens when artists and AI collaborate without limits.</span></p>
       </div>
       <div class="aside-badge b3">
-        <h4>Community</h4>
-        <p>Educators, students, industry veterans — one festival, many perspectives on the future of production.</p>
+        <h4><span data-lang="tr">Topluluk</span><span data-lang="en">Community</span></h4>
+        <p><span data-lang="tr">Eğitimciler, öğrenciler, sektör uzmanları — tek bir festival, üretimin geleceğine dair pek çok bakış açısı.</span><span data-lang="en">Educators, students, industry veterans — one festival, many perspectives on the future of production.</span></p>
       </div>
     </div>
   </section>
 
   <!-- PARTNERS -->
   <section class="partners" id="partners">
-    <h2 class="reveal">Partners & Organizers</h2>
+    <h2 class="reveal">
+      <span data-lang="tr">Paydaşlar &amp; Organizatörler</span>
+      <span data-lang="en">Partners &amp; Organizers</span>
+    </h2>
     <div class="partners-row reveal reveal-delay-1">
-      <div class="partner-chip">Yaşar University</div>
-      <div class="partner-chip">New Media & Comm.</div>
+      <div class="partner-chip">Yaşar Üniversitesi</div>
+      <div class="partner-chip"><span data-lang="tr">Yeni Medya &amp; İletişim</span><span data-lang="en">New Media &amp; Comm.</span></div>
       <div class="partner-chip">UrlaDAM</div>
-      <div class="partner-chip">İzmir Innovation Platform</div>
-      <div class="partner-chip">İzmir Metropolitan Municipality</div>
+      <div class="partner-chip"><span data-lang="tr">İzmir İnovasyon Platformu</span><span data-lang="en">İzmir Innovation Platform</span></div>
+      <div class="partner-chip"><span data-lang="tr">İzmir Büyükşehir Belediyesi</span><span data-lang="en">İzmir Metropolitan Municipality</span></div>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="cta-section" id="cta">
     <h2 class="reveal">
-      <span>Join Us</span>
-      <span class="accent">April 17</span>
+      <span data-lang="tr">Bize Katıl</span>
+      <span data-lang="en">Join Us</span>
+      <span class="accent">17 Nisan / April 17</span>
     </h2>
-    <p class="cta-free reveal reveal-delay-1">Free Admission · All Welcome</p>
-    <a href="#" class="cta-btn reveal reveal-delay-2"><span>Reserve Your Spot</span></a>
+    <p class="cta-free reveal reveal-delay-1">
+      <span data-lang="tr">Ücretsiz Giriş · Herkese Açık</span>
+      <span data-lang="en">Free Admission · All Welcome</span>
+    </p>
+    <a href="#" class="cta-btn reveal reveal-delay-2">
+      <span data-lang="tr">Yerini Ayırt</span>
+      <span data-lang="en">Reserve Your Spot</span>
+    </a>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <span>© 2025 YU AI Video Fest</span>
-    <span>UrlaDAM · İzmir · Turkey</span>
+    <span>UrlaDAM · İzmir · Türkiye</span>
     <a href="mailto:info@yuvideofest.com">info@yuvideofest.com</a>
   </footer>
 
   <script>
-    // Custom cursor
+    // ── Language switcher ──
+    function setLang(lang) {
+      document.body.className = 'lang-' + lang;
+      document.getElementById('btn-tr').classList.toggle('active', lang === 'tr');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+      document.documentElement.lang = lang;
+      try { localStorage.setItem('yufest-lang', lang); } catch(e){}
+    }
+    // Restore saved preference
+    try {
+      const saved = localStorage.getItem('yufest-lang');
+      if (saved === 'en') setLang('en');
+    } catch(e){}
+
+    // ── Custom cursor ──
     const cursor = document.getElementById('cursor');
     document.addEventListener('mousemove', e => {
       cursor.style.left = e.clientX + 'px';
@@ -939,27 +570,19 @@
       el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
     });
 
-    // Scroll reveal
+    // ── Scroll reveal ──
     const revealEls = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          observer.unobserve(e.target);
-        }
-      });
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
     }, { threshold: 0.12 });
-    revealEls.forEach(el => observer.observe(el));
+    revealEls.forEach(el => io.observe(el));
 
-    // Hero date nums animate in
+    // ── Hero date entrance ──
     document.querySelectorAll('.date-num').forEach((el, i) => {
       el.style.opacity = '0';
       el.style.transform = 'translateX(-30px)';
       el.style.transition = `opacity .6s ease ${i * .15 + .3}s, transform .6s ease ${i * .15 + .3}s`;
-      requestAnimationFrame(() => {
-        el.style.opacity = '1';
-        el.style.transform = 'translateX(0)';
-      });
+      requestAnimationFrame(() => { el.style.opacity = '1'; el.style.transform = 'translateX(0)'; });
     });
   </script>
 </body>
