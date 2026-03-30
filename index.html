@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YU AI Video Fest — April 17</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:    #E8343A;
+      --orange: #F47B20;
+      --pink:   #E84B8A;
+      --cyan:   #3ECFCE;
+      --yellow: #F5C842;
+      --dark:   #0a0a0f;
+      --mid:    #12121c;
+      --light:  #f0ece8;
+      --glitch-offset: 4px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--light);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor {
+      position: fixed; top: 0; left: 0;
+      width: 12px; height: 12px;
+      background: var(--cyan);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s, background .2s;
+      mix-blend-mode: difference;
+    }
+    .cursor.big { width: 40px; height: 40px; background: var(--pink); }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.035;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+
+    .hero__bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 30% 50%, rgba(232,52,58,.18) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 80% 20%, rgba(62,207,206,.12) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 70% 80%, rgba(232,75,138,.10) 0%, transparent 50%);
+    }
+
+    /* Animated scan lines */
+    .hero__bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(255,255,255,.015) 3px,
+        rgba(255,255,255,.015) 4px
+      );
+      animation: scanMove 8s linear infinite;
+    }
+    @keyframes scanMove { from { background-position-y: 0; } to { background-position-y: 100vh; } }
+
+    /* Left: typographic date block */
+    .hero__left {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6vw 4vw 6vw 6vw;
+      z-index: 2;
+    }
+
+    .date-block {
+      line-height: .88;
+      position: relative;
+    }
+
+    .date-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(9rem, 18vw, 18rem);
+      display: block;
+      position: relative;
+      color: var(--light);
+      letter-spacing: -.02em;
+    }
+
+    .date-num.red   { color: var(--red); }
+    .date-num.orange{ color: var(--orange); }
+
+    /* Glitch effect on hover */
+    .date-num::before, .date-num::after {
+      content: attr(data-text);
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      font-family: inherit; font-size: inherit;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .date-num:hover::before {
+      color: var(--cyan);
+      clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
+      transform: translateX(calc(var(--glitch-offset) * -1));
+      opacity: 1;
+      animation: glitchA .3s steps(2) infinite;
+    }
+    .date-num:hover::after {
+      color: var(--pink);
+      clip-path: polygon(0 65%, 100% 65%, 100% 80%, 0 80%);
+      transform: translateX(var(--glitch-offset));
+      opacity: 1;
+      animation: glitchB .3s steps(2) infinite;
+    }
+    @keyframes glitchA { 0%,100%{transform:translateX(-4px)} 50%{transform:translateX(4px)} }
+    @keyframes glitchB { 0%,100%{transform:translateX(4px)}  50%{transform:translateX(-4px)} }
+
+    .fest-label {
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .fest-label .ai-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      background: linear-gradient(135deg, var(--red), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: .05em;
+    }
+    .fest-label .video-fest {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.6rem);
+      letter-spacing: .2em;
+      color: var(--light);
+      opacity: .7;
+      line-height: 1.1;
+    }
+
+    .hero__meta {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      font-size: clamp(.8rem, 1.2vw, 1rem);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .6;
+    }
+    .hero__meta span { display: flex; align-items: center; gap: .5rem; }
+    .hero__meta em { color: var(--cyan); font-style: normal; }
+
+    /* Right: face illustration using CSS + blend modes */
+    .hero__right {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .face-container {
+      position: relative;
+      width: min(380px, 45vw);
+      height: min(550px, 70vh);
+    }
+
+    /* Main face silhouette */
+    .face-silhouette {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, rgba(232,52,58,.6) 0%, rgba(62,207,206,.4) 40%, rgba(232,75,138,.5) 80%);
+      border-radius: 48% 52% 30% 70% / 60% 40% 60% 40%;
+      filter: blur(0px);
+      overflow: hidden;
+    }
+    .face-silhouette::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(220deg, rgba(245,200,66,.3) 0%, transparent 50%);
+      mix-blend-mode: screen;
+    }
+
+    /* Glitch bands inside face */
+    .glitch-band {
+      position: absolute;
+      width: 120%;
+      left: -10%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      animation: bandMove 4s ease-in-out infinite;
+      opacity: .8;
+    }
+    .glitch-band:nth-child(2) { animation-delay: 1.5s; background: linear-gradient(90deg, transparent, var(--pink), transparent); }
+    .glitch-band:nth-child(3) { animation-delay: 3s; background: linear-gradient(90deg, transparent, var(--yellow), transparent); }
+    @keyframes bandMove {
+      0%   { top: 20%; opacity: 0; }
+      20%  { opacity: .8; }
+      80%  { opacity: .8; }
+      100% { top: 85%; opacity: 0; }
+    }
+
+    /* Floating color orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(30px);
+      mix-blend-mode: screen;
+      animation: orbFloat 6s ease-in-out infinite;
+    }
+    .orb-1 { width: 200px; height: 200px; background: var(--red);    top: -10%; left: -5%;  opacity: .5; }
+    .orb-2 { width: 150px; height: 150px; background: var(--cyan);   top: 20%;  right: -5%; opacity: .5; animation-delay: 2s; }
+    .orb-3 { width: 180px; height: 180px; background: var(--pink);   bottom: 0; left: 10%;  opacity: .45; animation-delay: 4s; }
+    .orb-4 { width: 120px; height: 120px; background: var(--yellow); top: 50%;  right: 10%; opacity: .4; animation-delay: 1s; }
+
+    @keyframes orbFloat {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-20px) scale(1.05); }
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 4rem;
+      background: linear-gradient(to bottom, rgba(10,10,15,.9), transparent);
+      backdrop-filter: blur(4px);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: .15em;
+      color: var(--light);
+    }
+    .nav-logo span { color: var(--red); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--light);
+      text-decoration: none;
+      font-size: .8rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      opacity: .6;
+      transition: opacity .2s, color .2s;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--cyan); }
+
+    .nav-cta {
+      font-size: .8rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      border: 1px solid var(--red);
+      color: var(--red);
+      padding: .6rem 1.4rem;
+      text-decoration: none;
+      transition: background .2s, color .2s;
+    }
+    .nav-cta:hover { background: var(--red); color: var(--dark); }
+
+    /* ─── MARQUEE ─── */
+    .marquee-bar {
+      background: var(--red);
+      overflow: hidden;
+      padding: .7rem 0;
+      position: relative;
+      z-index: 3;
+    }
+    .marquee-inner {
+      display: flex;
+      gap: 3rem;
+      white-space: nowrap;
+      animation: marqueeScroll 18s linear infinite;
+    }
+    .marquee-inner span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .2em;
+      color: var(--dark);
+    }
+    .marquee-inner .dot { color: var(--dark); opacity: .5; }
+    @keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ─── ABOUT ─── */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 4rem;
+      padding: 8rem 6vw;
+      position: relative;
+    }
+    .about::before {
+      content: 'ABOUT';
+      position: absolute;
+      top: 4rem; right: 6vw;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10rem;
+      color: var(--light);
+      opacity: .03;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .section-tag {
+      font-size: .75rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 1rem;
+    }
+
+    .about__heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: .95;
+      letter-spacing: .02em;
+    }
+    .about__heading em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--orange), var(--red));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .about__body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    .about__body p {
+      font-size: clamp(.9rem, 1.2vw, 1.05rem);
+      line-height: 1.75;
+      color: rgba(240,236,232,.65);
+    }
+
+    /* ─── PROGRAM ─── */
+    .program {
+      padding: 8rem 6vw;
+      background: var(--mid);
+      position: relative;
+    }
+    .program__header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 4rem;
+    }
+    .program__title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 1;
+      letter-spacing: .03em;
+    }
+    .program__title em {
+      display: block;
+      font-style: normal;
+      color: var(--orange);
+    }
+
+    .program-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,.07);
+    }
+    .program-card {
+      background: var(--mid);
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background .3s;
+    }
+    .program-card:hover { background: rgba(255,255,255,.04); }
+    .program-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 0;
+      background: linear-gradient(to bottom, var(--card-accent), transparent);
+      transition: height .4s ease;
+    }
+    .program-card:hover::before { height: 100%; }
+
+    .program-card.c1 { --card-accent: var(--red); }
+    .program-card.c2 { --card-accent: var(--cyan); }
+    .program-card.c3 { --card-accent: var(--orange); }
+    .program-card.c4 { --card-accent: var(--pink); }
+    .program-card.c5 { --card-accent: var(--yellow); }
+    .program-card.c6 { --card-accent: var(--cyan); }
+
+    .card-icon {
+      font-size: 1.6rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+    .card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: .06em;
+      margin-bottom: .6rem;
+    }
+    .card-desc {
+      font-size: .85rem;
+      line-height: 1.65;
+      color: rgba(240,236,232,.5);
+    }
+
+    /* ─── INFO STRIP ─── */
+    .info-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--red);
+    }
+    .info-item {
+      padding: 3rem 3vw;
+      border-right: 1px solid rgba(10,10,15,.2);
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+    .info-item:last-child { border-right: none; }
+    .info-label {
+      font-size: .7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba(10,10,15,.6);
+      font-weight: 500;
+    }
+    .info-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      color: var(--dark);
+      letter-spacing: .04em;
+      line-height: 1.1;
+    }
+
+    /* ─── HIGHLIGHTS ─── */
+    .highlights {
+      padding: 8rem 6vw;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .highlight-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .highlight-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      cursor: default;
+      transition: padding-left .3s;
+    }
+    .highlight-item:hover { padding-left: .5rem; }
+    .highlight-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--red);
+      line-height: 1;
+      flex-shrink: 0;
+      width: 3rem;
+      opacity: .5;
+      transition: opacity .3s;
+    }
+    .highlight-item:hover .highlight-num { opacity: 1; }
+    .highlight-text h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: .06em;
+      margin-bottom: .4rem;
+    }
+    .highlight-text p {
+      font-size: .85rem;
+      line-height: 1.65;
+      color: rgba(240,236,232,.5);
+    }
+
+    .highlights__aside {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .aside-badge {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.1);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .aside-badge::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 80px; height: 80px;
+      background: var(--badge-color, var(--red));
+      opacity: .15;
+      clip-path: polygon(100% 0, 0 0, 100% 100%);
+    }
+    .aside-badge h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: .08em;
+      margin-bottom: .5rem;
+      color: var(--badge-color, var(--red));
+    }
+    .aside-badge p {
+      font-size: .85rem;
+      line-height: 1.6;
+      color: rgba(240,236,232,.55);
+    }
+    .aside-badge.b1 { --badge-color: var(--cyan); }
+    .aside-badge.b2 { --badge-color: var(--orange); }
+    .aside-badge.b3 { --badge-color: var(--pink); }
+
+    /* ─── PARTNERS ─── */
+    .partners {
+      padding: 5rem 6vw;
+      background: var(--mid);
+      text-align: center;
+    }
+    .partners h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      letter-spacing: .15em;
+      margin-bottom: 3rem;
+      opacity: .4;
+    }
+    .partners-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .partner-chip {
+      border: 1px solid rgba(255,255,255,.12);
+      padding: .8rem 2rem;
+      font-size: .8rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(240,236,232,.5);
+      transition: border-color .3s, color .3s;
+    }
+    .partner-chip:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      padding: 10rem 6vw;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 50% 50%, rgba(232,52,58,.15) 0%, transparent 70%);
+    }
+    .cta-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 8vw, 8rem);
+      line-height: .9;
+      letter-spacing: .02em;
+      position: relative;
+    }
+    .cta-section h2 span { display: block; }
+    .cta-section h2 .accent {
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cta-free {
+      margin-top: 1.5rem;
+      font-size: clamp(.9rem, 1.5vw, 1.1rem);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      position: relative;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      margin-top: 3rem;
+      padding: 1.2rem 4rem;
+      background: var(--red);
+      color: var(--light);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: .15em;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s;
+    }
+    .cta-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--orange);
+      transform: translateX(-100%);
+      transition: transform .3s ease;
+    }
+    .cta-btn:hover { transform: translateY(-2px); }
+    .cta-btn:hover::before { transform: translateX(0); }
+    .cta-btn span { position: relative; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #060608;
+      padding: 2.5rem 6vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(240,236,232,.3);
+    }
+    footer a { color: rgba(240,236,232,.3); text-decoration: none; transition: color .2s; }
+    footer a:hover { color: var(--cyan); }
+
+    /* ─── ENTRANCE ANIMATIONS ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 5rem; }
+      .hero__right { display: none; }
+      .about, .highlights { grid-template-columns: 1fr; gap: 3rem; }
+      .program-grid { grid-template-columns: 1fr 1fr; }
+      .info-strip { grid-template-columns: 1fr; }
+      .info-item { border-right: none; border-bottom: 1px solid rgba(10,10,15,.2); }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      .program-grid { grid-template-columns: 1fr; }
+      .partners-row { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">YU <span>AI</span> FEST</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#program">Program</a></li>
+      <li><a href="#highlights">Highlights</a></li>
+      <li><a href="#partners">Partners</a></li>
+    </ul>
+    <a href="#cta" class="nav-cta">Free Entry</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__bg"></div>
+
+    <div class="hero__left">
+      <div class="date-block">
+        <span class="date-num red" data-text="17">17</span>
+        <span class="date-num orange" data-text="04">04</span>
+        <span class="date-num" data-text="26">26</span>
+      </div>
+      <div class="fest-label">
+        <div class="ai-tag">AI Video Fest</div>
+        <div class="video-fest">Yaşar<br>University</div>
+      </div>
+      <div class="hero__meta">
+        <span>📍 <em>UrlaDAM</em>, İzmir</span>
+        <span>🗓 April 17, 2025 &nbsp;·&nbsp; <em>11:00 – 21:00</em></span>
+        <span>🎟 <em>Free</em> Admission</span>
+      </div>
+    </div>
+
+    <div class="hero__right">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="orb orb-4"></div>
+      <div class="face-container">
+        <div class="face-silhouette">
+          <div class="glitch-band"></div>
+          <div class="glitch-band"></div>
+          <div class="glitch-band"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-bar" aria-hidden="true">
+    <div class="marquee-inner">
+      <span>AI VIDEO FEST</span><span class="dot">◆</span>
+      <span>APRIL 17</span><span class="dot">◆</span>
+      <span>URLAD AM İZMİR</span><span class="dot">◆</span>
+      <span>FREE ADMISSION</span><span class="dot">◆</span>
+      <span>PANELS</span><span class="dot">◆</span>
+      <span>WORKSHOPS</span><span class="dot">◆</span>
+      <span>SCREENINGS</span><span class="dot">◆</span>
+      <span>AR / VR</span><span class="dot">◆</span>
+      <span>AI VIDEO FEST</span><span class="dot">◆</span>
+      <span>APRIL 17</span><span class="dot">◆</span>
+      <span>URLAD AM İZMİR</span><span class="dot">◆</span>
+      <span>FREE ADMISSION</span><span class="dot">◆</span>
+      <span>PANELS</span><span class="dot">◆</span>
+      <span>WORKSHOPS</span><span class="dot">◆</span>
+      <span>SCREENINGS</span><span class="dot">◆</span>
+      <span>AR / VR</span><span class="dot">◆</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="reveal">
+      <p class="section-tag">About the Festival</p>
+      <h2 class="about__heading">
+        The New<br>
+        <em>Frontiers</em><br>
+        of Creation
+      </h2>
+    </div>
+    <div class="about__body reveal reveal-delay-1">
+      <p>
+        The YU AI Video Fest explores the new frontiers that AI-powered video production is opening up in the creative industries — bringing together technologists, filmmakers, educators, and students for a full day of discovery.
+      </p>
+      <p>
+        Organized in collaboration with Yaşar University's Department of New Media and Communication and UrlaDAM, the festival examines the impact of AI on advertising, cinema, and creative production through panels, workshops, and screenings.
+      </p>
+      <p>
+        With support from the İzmir Innovation Platform and the İzmir Metropolitan Municipality, the day features awards designed to encourage young creators alongside inspiring networking opportunities.
+      </p>
+    </div>
+  </section>
+
+  <!-- INFO STRIP -->
+  <div class="info-strip">
+    <div class="info-item">
+      <span class="info-label">Date</span>
+      <span class="info-value">Thursday, April 17, 2025</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Hours</span>
+      <span class="info-value">11:00 AM — 9:00 PM</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Location</span>
+      <span class="info-value">UrlaDAM, İzmir</span>
+    </div>
+  </div>
+
+  <!-- PROGRAM -->
+  <section class="program" id="program">
+    <div class="program__header reveal">
+      <div>
+        <p class="section-tag">What's On</p>
+        <h2 class="program__title">Full Day<br><em>Program</em></h2>
+      </div>
+    </div>
+
+    <div class="program-grid">
+      <div class="program-card c1 reveal">
+        <span class="card-icon">🎙</span>
+        <div class="card-title">Panels</div>
+        <p class="card-desc">Industry leaders discuss AI's transformative role in advertising, cinema, and creative production.</p>
+      </div>
+      <div class="program-card c2 reveal reveal-delay-1">
+        <span class="card-icon">🛠</span>
+        <div class="card-title">Workshops</div>
+        <p class="card-desc">Hands-on sessions led by practitioners. Learn, build, and experiment with cutting-edge AI tools.</p>
+      </div>
+      <div class="program-card c3 reveal reveal-delay-2">
+        <span class="card-icon">🎬</span>
+        <div class="card-title">Screenings</div>
+        <p class="card-desc">A curated selection of AI-generated videos from Turkey — short films, ads, and experimental works.</p>
+      </div>
+      <div class="program-card c4 reveal">
+        <span class="card-icon">🥽</span>
+        <div class="card-title">AR / VR Experiences</div>
+        <p class="card-desc">Immersive and extended-reality installations that push the boundaries of storytelling.</p>
+      </div>
+      <div class="program-card c5 reveal reveal-delay-1">
+        <span class="card-icon">🎓</span>
+        <div class="card-title">Student Showcase</div>
+        <p class="card-desc">Projects by the next generation of creators — raw, ambitious, and AI-powered.</p>
+      </div>
+      <div class="program-card c6 reveal reveal-delay-2">
+        <span class="card-icon">🏆</span>
+        <div class="card-title">Awards</div>
+        <p class="card-desc">Recognition for outstanding young creators pushing the frontiers of AI video production.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section class="highlights" id="highlights">
+    <div class="highlight-list reveal">
+      <p class="section-tag" style="margin-bottom:2rem">Why Attend</p>
+      <div class="highlight-item">
+        <div class="highlight-num">01</div>
+        <div class="highlight-text">
+          <h3>See Turkey's Best AI Videos</h3>
+          <p>A curated showcase of the most innovative AI-generated video work produced in Turkey, in one place.</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="highlight-num">02</div>
+        <div class="highlight-text">
+          <h3>Meet the Industry</h3>
+          <p>Connect with professionals from advertising, film, and tech. Real networking, real conversations.</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="highlight-num">03</div>
+        <div class="highlight-text">
+          <h3>Hands-On Learning</h3>
+          <p>Leave with new skills from practical workshops. No prior experience required — just curiosity.</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="highlight-num">04</div>
+        <div class="highlight-text">
+          <h3>Completely Free</h3>
+          <p>No ticket price, no catch. Open to everyone with a passion for creativity and technology.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlights__aside reveal reveal-delay-2">
+      <div class="aside-badge b1">
+        <h4>Technology</h4>
+        <p>From generative video to immersive AR/VR — experience the tools reshaping how stories are told.</p>
+      </div>
+      <div class="aside-badge b2">
+        <h4>Creativity</h4>
+        <p>A day built around imagination. See what happens when artists and AI collaborate without limits.</p>
+      </div>
+      <div class="aside-badge b3">
+        <h4>Community</h4>
+        <p>Educators, students, industry veterans — one festival, many perspectives on the future of production.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNERS -->
+  <section class="partners" id="partners">
+    <h2 class="reveal">Partners & Organizers</h2>
+    <div class="partners-row reveal reveal-delay-1">
+      <div class="partner-chip">Yaşar University</div>
+      <div class="partner-chip">New Media & Comm.</div>
+      <div class="partner-chip">UrlaDAM</div>
+      <div class="partner-chip">İzmir Innovation Platform</div>
+      <div class="partner-chip">İzmir Metropolitan Municipality</div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="cta">
+    <h2 class="reveal">
+      <span>Join Us</span>
+      <span class="accent">April 17</span>
+    </h2>
+    <p class="cta-free reveal reveal-delay-1">Free Admission · All Welcome</p>
+    <a href="#" class="cta-btn reveal reveal-delay-2"><span>Reserve Your Spot</span></a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2025 YU AI Video Fest</span>
+    <span>UrlaDAM · İzmir · Turkey</span>
+    <a href="mailto:info@yuvideofest.com">info@yuvideofest.com</a>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .program-card, .highlight-item').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // Hero date nums animate in
+    document.querySelectorAll('.date-num').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(-30px)';
+      el.style.transition = `opacity .6s ease ${i * .15 + .3}s, transform .6s ease ${i * .15 + .3}s`;
+      requestAnimationFrame(() => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateX(0)';
+      });
+    });
+  </script>
+</body>
+</html>
