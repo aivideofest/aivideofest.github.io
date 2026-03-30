@@ -157,8 +157,38 @@
 
     .hero__right { position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; z-index:2; }
     .face-container { position:relative; width:min(380px,45vw); height:min(550px,70vh); }
-    .face-silhouette { position:absolute; inset:0; background:linear-gradient(160deg,rgba(232,52,58,.6) 0%,rgba(62,207,206,.4) 40%,rgba(232,75,138,.5) 80%); border-radius:48% 52% 30% 70% / 60% 40% 60% 40%; overflow:hidden; }
-    .face-silhouette::before { content:''; position:absolute; inset:0; background:linear-gradient(220deg,rgba(245,200,66,.3) 0%,transparent 50%); mix-blend-mode:screen; }
+    
+    /* YENİ VE HAREKETLİ MASK / GIF KISMI */
+    .face-silhouette { 
+      position:absolute; inset:0; 
+      background-image: url('download.gif'); /* Senin GIF dosyan buraya bağlandı */
+      background-size: cover;
+      background-position: center;
+      border-radius:48% 52% 30% 70% / 60% 40% 60% 40%; 
+      overflow:hidden; 
+      box-shadow: 0 0 50px rgba(62,207,206,.15); /* Hafif bir parlama */
+      animation: blobPulse 8s ease-in-out infinite; /* Nefes alma animasyonu */
+    }
+    
+    .face-silhouette::before { 
+      content:''; position:absolute; inset:0; 
+      background:linear-gradient(220deg,rgba(232,75,138,.2) 0%,transparent 50%); 
+      mix-blend-mode:screen; 
+      pointer-events: none;
+    }
+    
+    /* BLOB NEFES ALMA ANİMASYONU */
+    @keyframes blobPulse {
+      0%, 100% {
+        border-radius: 48% 52% 30% 70% / 60% 40% 60% 40%;
+        transform: scale(1);
+      }
+      50% {
+        border-radius: 60% 40% 50% 50% / 40% 60% 50% 50%;
+        transform: scale(1.03);
+      }
+    }
+
     .glitch-band { position:absolute; width:120%; left:-10%; height:2px; background:linear-gradient(90deg,transparent,var(--cyan),transparent); animation:bandMove 4s ease-in-out infinite; opacity:.8; }
     .glitch-band:nth-child(2) { animation-delay:1.5s; background:linear-gradient(90deg,transparent,var(--pink),transparent); }
     .glitch-band:nth-child(3) { animation-delay:3s;   background:linear-gradient(90deg,transparent,var(--yellow),transparent); }
@@ -287,13 +317,11 @@
 
   <div class="cursor" id="cursor"></div>
 
-  <!-- LANG SWITCHER -->
   <div class="lang-switcher">
     <button class="lang-btn active" id="btn-tr" onclick="setLang('tr')">TR</button>
     <button class="lang-btn"        id="btn-en" onclick="setLang('en')">EN</button>
   </div>
 
-  <!-- NAV -->
   <nav>
     <div class="nav-logo">YU <span>AI</span> FEST</div>
     <ul class="nav-links">
@@ -308,7 +336,6 @@
     </a>
   </nav>
 
-  <!-- HERO -->
   <section class="hero">
     <div class="hero__bg"></div>
     <div class="hero__left">
@@ -342,7 +369,6 @@
     </div>
   </section>
 
-  <!-- MARQUEE -->
   <div class="marquee-bar" data-lang="tr" aria-hidden="true">
     <div class="marquee-inner">
       <span>AI VIDEO FEST</span><span class="dot">◆</span><span>17 NİSAN</span><span class="dot">◆</span>
@@ -368,7 +394,6 @@
     </div>
   </div>
 
-  <!-- ABOUT -->
   <section class="about" id="about">
     <div class="reveal">
       <p class="section-tag">
@@ -392,7 +417,6 @@
     </div>
   </section>
 
-  <!-- INFO STRIP -->
   <div class="info-strip">
     <div class="info-item">
       <span class="info-label"><span data-lang="tr">Tarih</span><span data-lang="en">Date</span></span>
@@ -408,7 +432,6 @@
     </div>
   </div>
 
-  <!-- PROGRAM -->
   <section class="program" id="program">
     <div class="program__header reveal">
       <div>
@@ -453,7 +476,6 @@
     </div>
   </section>
 
-  <!-- HIGHLIGHTS -->
   <section class="highlights" id="highlights">
     <div class="highlight-list reveal">
       <p class="section-tag" style="margin-bottom:2rem">
@@ -505,7 +527,6 @@
     </div>
   </section>
 
-  <!-- PARTNERS -->
   <section class="partners" id="partners">
     <h2 class="reveal">
       <span data-lang="tr">Paydaşlar &amp; Organizatörler</span>
@@ -520,7 +541,6 @@
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="cta-section" id="cta">
     <h2 class="reveal">
       <span data-lang="tr">Bize Katıl</span>
@@ -537,7 +557,6 @@
     </a>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <span>© 2025 YU AI Video Fest</span>
     <span>UrlaDAM · İzmir · Türkiye</span>
