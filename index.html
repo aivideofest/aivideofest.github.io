@@ -156,18 +156,17 @@
     .hero__meta em { color:var(--cyan); font-style:normal; }
 
     .hero__right { position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; z-index:2; }
-    .face-container { position:relative; width:min(380px,45vw); height:min(550px,70vh); }
+    .face-container { position:relative; width:min(450px,45vw); height:min(550px,70vh); }
     
-    /* YENİ VE HAREKETLİ MASK / GIF KISMI */
+    /* GÜNCELLENEN KADIN GÖRSELİ KISMI */
     .face-silhouette { 
       position:absolute; inset:0; 
-      background-image: url('download.gif'); /* Senin GIF dosyan buraya bağlandı */
-      background-size: cover;
+      background-image: url('Kadin.jpg'); /* Senin yeni görselin buraya bağlandı */
+      background-size: contain; 
       background-position: center;
-      border-radius:48% 52% 30% 70% / 60% 40% 60% 40%; 
+      background-repeat: no-repeat;
       overflow:hidden; 
-      box-shadow: 0 0 50px rgba(62,207,206,.15); /* Hafif bir parlama */
-      animation: blobPulse 8s ease-in-out infinite; /* Nefes alma animasyonu */
+      animation: floatPulse 8s ease-in-out infinite; /* Nefes alma / süzülme animasyonu */
     }
     
     .face-silhouette::before { 
@@ -177,15 +176,13 @@
       pointer-events: none;
     }
     
-    /* BLOB NEFES ALMA ANİMASYONU */
-    @keyframes blobPulse {
+    /* SÜZÜLME (NEFES ALMA) ANİMASYONU */
+    @keyframes floatPulse {
       0%, 100% {
-        border-radius: 48% 52% 30% 70% / 60% 40% 60% 40%;
-        transform: scale(1);
+        transform: translateY(0) scale(1);
       }
       50% {
-        border-radius: 60% 40% 50% 50% / 40% 60% 50% 50%;
-        transform: scale(1.03);
+        transform: translateY(-10px) scale(1.02);
       }
     }
 
