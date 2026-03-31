@@ -155,42 +155,50 @@
     .hero__meta .meta-row { display:flex; align-items:center; gap:.5rem; }
     .hero__meta em { color:var(--cyan); font-style:normal; }
 
-    .hero__right { position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; z-index:2; }
-    .face-container { position:relative; width:min(450px,45vw); height:min(550px,70vh); }
+    /* SAĞ TARAF VE KADIN GÖRSELİ GÜNCELLEMESİ */
+    .hero__right { 
+      position:relative; 
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      /* overflow:hidden kaldırıldı ki görsel rahat sığsın */ 
+      z-index:2; 
+    }
     
-    /* GÜNCELLENEN KADIN GÖRSELİ KISMI */
+    .face-container { 
+      position:relative; 
+      width: 100%; /* Genişletildi */
+      height: 90vh; /* Genişletildi */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
     .face-silhouette { 
-      position:absolute; inset:0; 
-      background-image: url('Kadin.png'); /* Senin yeni görselin buraya bağlandı */
-      background-size: contain; 
-      background-position: center;
+      position:absolute; 
+      inset:0; 
+      background-image: url('kadin.png'); /* Dosyanın adının tam olarak Kadin.jpg olduğundan emin ol */
+      background-size: contain; /* Görseli kesmeden tam sığdırır */
+      background-position: center right; /* Görseli sağa yaslar */
       background-repeat: no-repeat;
-      overflow:hidden; 
-      animation: floatPulse 8s ease-in-out infinite; /* Nefes alma / süzülme animasyonu */
+      /* Border-radius ve box-shadow maskeleri tamamen silindi! */
+      animation: floatPulse 6s ease-in-out infinite; /* Sadece yavaşça yukarı aşağı süzülme efekti kaldı */
     }
     
     .face-silhouette::before { 
-      content:''; position:absolute; inset:0; 
-      background:linear-gradient(220deg,rgba(232,75,138,.2) 0%,transparent 50%); 
-      mix-blend-mode:screen; 
-      pointer-events: none;
+      display: none; /* Üzerindeki karanlık/pembe renk filtresi tamamen kapatıldı */
     }
     
-    /* SÜZÜLME (NEFES ALMA) ANİMASYONU */
+    /* GÖRSELİ BOZAN ÇİZGİLER (GLITCH-BAND) GİZLENDİ */
+    .glitch-band { display: none; }
+
+    /* HAFİF SÜZÜLME (NEFES ALMA) ANİMASYONU */
     @keyframes floatPulse {
-      0%, 100% {
-        transform: translateY(0) scale(1);
-      }
-      50% {
-        transform: translateY(-10px) scale(1.02);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
     }
 
-    .glitch-band { position:absolute; width:120%; left:-10%; height:2px; background:linear-gradient(90deg,transparent,var(--cyan),transparent); animation:bandMove 4s ease-in-out infinite; opacity:.8; }
-    .glitch-band:nth-child(2) { animation-delay:1.5s; background:linear-gradient(90deg,transparent,var(--pink),transparent); }
-    .glitch-band:nth-child(3) { animation-delay:3s;   background:linear-gradient(90deg,transparent,var(--yellow),transparent); }
-    @keyframes bandMove { 0%{top:20%;opacity:0} 20%{opacity:.8} 80%{opacity:.8} 100%{top:85%;opacity:0} }
-    .orb { position:absolute; border-radius:50%; filter:blur(30px); mix-blend-mode:screen; animation:orbFloat 6s ease-in-out infinite; }
+    .orb { position:absolute; border-radius:50%; filter:blur(30px); mix-blend-mode:screen; animation:orbFloat 6s ease-in-out infinite; z-index: -1; }
     .orb-1{width:200px;height:200px;background:var(--red);   top:-10%;left:-5%; opacity:.5}
     .orb-2{width:150px;height:150px;background:var(--cyan);  top:20%;right:-5%;opacity:.5;animation-delay:2s}
     .orb-3{width:180px;height:180px;background:var(--pink);  bottom:0;left:10%;opacity:.45;animation-delay:4s}
@@ -358,10 +366,7 @@
       <div class="orb orb-3"></div><div class="orb orb-4"></div>
       <div class="face-container">
         <div class="face-silhouette">
-          <div class="glitch-band"></div>
-          <div class="glitch-band"></div>
-          <div class="glitch-band"></div>
-        </div>
+          </div>
       </div>
     </div>
   </section>
