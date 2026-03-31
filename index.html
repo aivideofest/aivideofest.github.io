@@ -299,21 +299,21 @@
     .reveal.visible { opacity:1; transform:translateY(0); }
     .reveal-delay-1{transition-delay:.1s} .reveal-delay-2{transition-delay:.2s} .reveal-delay-3{transition-delay:.3s}
 
-    /* ─── SAAT KULESİ (ORTA BOŞLUK) ─── */
+/* ─── SAAT KULESİ (TAM ORTA ARKA PLAN) ─── */
     .hero__clock {
       position: absolute;
       top: 50%;
-      left: 15%;
-      transform: translateY(-50%);
-      width: 85vw;
-      height: 80vh;
+      left: 50%; /* Sayfanın tam ortası */
+      transform: translate(-50%, -50%); /* Hem yatay hem dikey olarak kusursuz merkezleme yapar */
+      width: 40vw; /* Boyutunu ayarlamak için bu değeri 30vw - 50vw arası değiştirebilirsin */
+      height: 90vh;
       background-image: url('saatkule.png');
-      background-size: contain;
-      background-position: center;
+      background-size: contain; /* Görselin orantısını bozmadan kutuya tam sığdırır */
+      background-position: center center;
       background-repeat: no-repeat;
-      z-index: 1;
+      z-index: 1; /* Yazıların (z-index: 2) arkasında kalmasını sağlar */
       pointer-events: none;
-      opacity: 0.85;
+      opacity: 0.5; /* Arka planda daha soft/flu durması için saydamlığı düşürdük (0.1 ile 1 arası deneyebilirsin) */
       animation: floatPulse 8s ease-in-out infinite reverse;
     }
 
