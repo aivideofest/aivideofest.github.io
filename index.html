@@ -157,36 +157,32 @@
 
     /* SAĞ TARAF VE KADIN GÖRSELİ GÜNCELLEMESİ */
     .hero__right { 
-      position:relative; 
-      display:flex; 
-      align-items:center; 
-      justify-content:center; 
-      /* overflow:hidden kaldırıldı ki görsel rahat sığsın */ 
-      z-index:2; 
+      position: relative; 
+      display: block; 
+      z-index: 2; 
     }
     
     .face-container { 
-      position:relative; 
-      width: 100%; /* Genişletildi */
-      height: 90vh; /* Genişletildi */
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      position: absolute; 
+      bottom: 0; 
+      right: 0; 
+      width: 130%; 
+      height: 100vh; 
+      pointer-events: none; 
     }
     
     .face-silhouette { 
-      position:absolute; 
-      inset:0; 
-      background-image: url('Kadin.png'); /* Dosyanın adının tam olarak Kadin.jpg olduğundan emin ol */
-      background-size: contain; /* Görseli kesmeden tam sığdırır */
-      background-position: center right; /* Görseli sağa yaslar */
+      position: absolute; 
+      inset: 0; 
+      background-image: url('Kadin.png'); 
+      background-size: contain; 
+      background-position: bottom right; 
       background-repeat: no-repeat;
-      /* Border-radius ve box-shadow maskeleri tamamen silindi! */
-      animation: floatPulse 6s ease-in-out infinite; /* Sadece yavaşça yukarı aşağı süzülme efekti kaldı */
+      /* animation: floatPulse 6s ease-in-out infinite; */
     }
     
     .face-silhouette::before { 
-      display: none; /* Üzerindeki karanlık/pembe renk filtresi tamamen kapatıldı */
+      display: none; 
     }
     
     /* GÖRSELİ BOZAN ÇİZGİLER (GLITCH-BAND) GİZLENDİ */
@@ -299,7 +295,7 @@
     .reveal.visible { opacity:1; transform:translateY(0); }
     .reveal-delay-1{transition-delay:.1s} .reveal-delay-2{transition-delay:.2s} .reveal-delay-3{transition-delay:.3s}
 
-/* ─── SAAT KULESİ (TAM ORTA ARKA PLAN) ─── */
+    /* ─── SAAT KULESİ (TAM ORTA ARKA PLAN) ─── */
     .hero__clock {
       position: absolute;
       top: 31%;
