@@ -299,6 +299,24 @@
     .reveal.visible { opacity:1; transform:translateY(0); }
     .reveal-delay-1{transition-delay:.1s} .reveal-delay-2{transition-delay:.2s} .reveal-delay-3{transition-delay:.3s}
 
+    /* ─── SAAT KULESİ (ORTA BOŞLUK) ─── */
+    .hero__clock {
+      position: absolute;
+      top: 50%;
+      left: 35%;
+      transform: translateY(-50%);
+      width: 25vw;
+      height: 80vh;
+      background-image: url('saatkule.png');
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.85;
+      animation: floatPulse 8s ease-in-out infinite reverse;
+    }
+
     /* ─── RESPONSIVE ─── */
     @media(max-width:900px){
       nav{padding:1.2rem 2rem}
@@ -306,6 +324,7 @@
       .lang-switcher{right:2rem; top:1.2rem}
       .hero{grid-template-columns:1fr;min-height:auto;padding-top:5rem}
       .hero__right{display:none}
+      .hero__clock{display:none} /* Mobilde kule gizleniyor */
       .about,.highlights{grid-template-columns:1fr;gap:3rem}
       .program-grid{grid-template-columns:1fr 1fr}
       .info-strip{grid-template-columns:1fr}
@@ -343,6 +362,9 @@
 
   <section class="hero">
     <div class="hero__bg"></div>
+    
+    <div class="hero__clock"></div>
+
     <div class="hero__left">
       <div class="date-block">
         <span class="date-num red"    data-text="17">17</span>
