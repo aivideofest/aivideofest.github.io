@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=1920" />
   <title>YU AI Video Fest — 17 Nisan</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
   <style>
@@ -18,9 +18,17 @@
       --mid:    #12121c;
       --light:  #f0ece8;
       --glitch-offset: 4px;
+
+      /* 1920×900 layout tokens */
+      --nav-h: 64px;
+      --side-pad: 80px;
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      /* Lock the viewport width so proportions stay intact when viewed at 1920px */
+      min-width: 1920px;
+    }
 
     body {
       background: var(--dark);
@@ -29,8 +37,11 @@
       font-weight: 300;
       overflow-x: hidden;
       cursor: none;
+      width: 1920px;
+      margin: 0 auto;
     }
 
+    /* ─── CURSOR ─── */
     .cursor {
       position: fixed; top: 0; left: 0;
       width: 12px; height: 12px;
@@ -56,8 +67,8 @@
     /* ─── LANG SWITCHER ─── */
     .lang-switcher {
       position: fixed;
-      top: 1.6rem;
-      right: 18rem;
+      top: 18px;
+      right: 280px;
       z-index: 600;
       display: flex;
       border: 1px solid rgba(255,255,255,.18);
@@ -84,50 +95,69 @@
     [data-lang] { display: none !important; }
     body.lang-tr [data-lang="tr"] { display: block !important; }
     body.lang-en [data-lang="en"] { display: block !important; }
-    /* inline overrides */
     body.lang-tr span[data-lang="tr"],
     body.lang-tr a[data-lang="tr"]  { display: inline !important; }
     body.lang-en span[data-lang="en"],
     body.lang-en a[data-lang="en"]  { display: inline !important; }
-    /* flex overrides */
     body.lang-tr .flex-tr { display: flex !important; }
     body.lang-en .flex-en { display: flex !important; }
 
-    /* ─── HERO ─── */
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--side-pad);
+      height: var(--nav-h);
+      background: linear-gradient(to bottom, rgba(10,10,15,.95), transparent);
+      backdrop-filter: blur(6px);
+      width: 1920px;
+    }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .15em; color: var(--light); }
+    .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: var(--light); text-decoration: none; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; opacity: .6; transition: opacity .2s, color .2s; }
+    .nav-links a:hover { opacity: 1; color: var(--cyan); }
+    .nav-cta { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; border: 1px solid var(--red); color: var(--red); padding: .55rem 1.6rem; text-decoration: none; transition: background .2s, color .2s; }
+    .nav-cta:hover { background: var(--red); color: var(--dark); }
+
+    /* ─── HERO — full 1920×900 viewport ─── */
     .hero {
       position: relative;
-      min-height: 100vh;
+      width: 1920px;
+      height: 900px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       overflow: hidden;
     }
+
     .hero__bg {
       position: absolute; inset: 0;
       background:
-        radial-gradient(ellipse 60% 80% at 30% 50%, rgba(232,52,58,.18) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 60% at 80% 20%, rgba(62,207,206,.12) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 40% at 70% 80%, rgba(232,75,138,.10) 0%, transparent 50%);
+        radial-gradient(ellipse 60% 80% at 28% 50%, rgba(232,52,58,.22) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 82% 18%, rgba(62,207,206,.14) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 72% 82%, rgba(232,75,138,.12) 0%, transparent 50%);
     }
     .hero__bg::after {
       content: '';
       position: absolute; inset: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,.015) 3px, rgba(255,255,255,.015) 4px);
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,.012) 3px, rgba(255,255,255,.012) 4px);
       animation: scanMove 8s linear infinite;
     }
-    @keyframes scanMove { from{background-position-y:0} to{background-position-y:100vh} }
+    @keyframes scanMove { from{background-position-y:0} to{background-position-y:900px} }
 
     .hero__left {
       position: relative;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 6vw 4vw 6vw 6vw;
+      padding: 0 60px 0 var(--side-pad);
       z-index: 2;
     }
+
     .date-block { line-height: .88; }
     .date-num {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(9rem, 18vw, 18rem);
+      font-size: 200px; /* fixed px for 1920×900 */
       display: block;
       position: relative;
       color: var(--light);
@@ -147,190 +177,176 @@
     @keyframes glitchA { 0%,100%{transform:translateX(-4px)} 50%{transform:translateX(4px)} }
     @keyframes glitchB { 0%,100%{transform:translateX(4px)}  50%{transform:translateX(-4px)} }
 
-    .fest-label { margin-top:2rem; display:flex; align-items:center; gap:1rem; }
-    .ai-tag { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.8rem,3.5vw,3rem); background:linear-gradient(135deg,var(--red),var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:.05em; }
-    .video-fest { font-family:'Bebas Neue',sans-serif; font-size:clamp(1rem,2vw,1.6rem); letter-spacing:.2em; color:var(--light); opacity:.7; line-height:1.1; }
-
-    .hero__meta { margin-top:3rem; display:flex; flex-direction:column; gap:.6rem; font-size:clamp(.8rem,1.2vw,1rem); letter-spacing:.08em; text-transform:uppercase; opacity:.6; }
-    .hero__meta .meta-row { display:flex; align-items:center; gap:.5rem; }
-    .hero__meta em { color:var(--cyan); font-style:normal; }
-
-    /* SAĞ TARAF VE KADIN GÖRSELİ GÜNCELLEMESİ */
-    .hero__right { 
-      position: relative; 
-      display: block; 
-      z-index: 2; 
+    .fest-label {
+      margin-top: 16px;
+      display: flex; align-items: center; gap: 20px;
     }
-    
-    .face-container { 
-      position: absolute; 
-      bottom: 0; 
-      right: 0; 
-      width: 130%; 
-      height: 100vh; 
-      pointer-events: none; 
+    .ai-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      background: linear-gradient(135deg, var(--red), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      letter-spacing: .05em;
     }
-    
-    .face-silhouette { 
-      position: absolute; 
-      inset: 0; 
-      background-image: url('Kadin.png'); 
-      background-size: contain; 
-      background-position: bottom right; 
+    .video-fest {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.55rem;
+      letter-spacing: .2em;
+      color: var(--light);
+      opacity: .7;
+      line-height: 1.1;
+    }
+
+    .hero__meta {
+      margin-top: 28px;
+      display: flex; flex-direction: column; gap: 7px;
+      font-size: .92rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .65;
+    }
+    .hero__meta .meta-row { display: flex; align-items: center; gap: .5rem; }
+    .hero__meta em { color: var(--cyan); font-style: normal; }
+
+    /* ─── HERO RIGHT ─── */
+    .hero__right {
+      position: relative;
+      display: block;
+      z-index: 2;
+    }
+
+    .face-container {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 130%;
+      height: 900px;
+      pointer-events: none;
+    }
+    .face-silhouette {
+      position: absolute;
+      inset: 0;
+      background-image: url('Kadin.png');
+      background-size: contain;
+      background-position: bottom right;
       background-repeat: no-repeat;
-      /* animation: floatPulse 6s ease-in-out infinite; */
-    }
-    
-    .face-silhouette::before { 
-      display: none; 
-    }
-    
-    /* GÖRSELİ BOZAN ÇİZGİLER (GLITCH-BAND) GİZLENDİ */
-    .glitch-band { display: none; }
-
-    /* HAFİF SÜZÜLME (NEFES ALMA) ANİMASYONU */
-    @keyframes floatPulse {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
     }
 
-    .orb { position:absolute; border-radius:50%; filter:blur(30px); mix-blend-mode:screen; animation:orbFloat 6s ease-in-out infinite; z-index: -1; }
-    .orb-1{width:200px;height:200px;background:var(--red);   top:-10%;left:-5%; opacity:.5}
-    .orb-2{width:150px;height:150px;background:var(--cyan);  top:20%;right:-5%;opacity:.5;animation-delay:2s}
-    .orb-3{width:180px;height:180px;background:var(--pink);  bottom:0;left:10%;opacity:.45;animation-delay:4s}
-    .orb-4{width:120px;height:120px;background:var(--yellow);top:50%;right:10%;opacity:.4;animation-delay:1s}
-    @keyframes orbFloat { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-20px) scale(1.05)} }
+    .orb { position: absolute; border-radius: 50%; filter: blur(30px); mix-blend-mode: screen; animation: orbFloat 6s ease-in-out infinite; z-index: -1; }
+    .orb-1{width:220px;height:220px;background:var(--red);   top:-5%;left:-5%;  opacity:.5}
+    .orb-2{width:160px;height:160px;background:var(--cyan);  top:20%;right:-5%;opacity:.5;animation-delay:2s}
+    .orb-3{width:190px;height:190px;background:var(--pink);  bottom:0;left:10%; opacity:.45;animation-delay:4s}
+    .orb-4{width:130px;height:130px;background:var(--yellow);top:50%;right:10%;opacity:.4;animation-delay:1s}
+    @keyframes orbFloat { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-18px) scale(1.05)} }
 
-    /* ─── NAV ─── */
-    nav { position:fixed; top:0; left:0; right:0; z-index:500; display:flex; align-items:center; justify-content:space-between; padding:1.5rem 4rem; background:linear-gradient(to bottom,rgba(10,10,15,.9),transparent); backdrop-filter:blur(4px); }
-    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:.15em; color:var(--light); }
-    .nav-logo span { color:var(--red); }
-    .nav-links { display:flex; gap:2rem; list-style:none; }
-    .nav-links a { color:var(--light); text-decoration:none; font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; opacity:.6; transition:opacity .2s,color .2s; }
-    .nav-links a:hover { opacity:1; color:var(--cyan); }
-    .nav-cta { font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; border:1px solid var(--red); color:var(--red); padding:.6rem 1.4rem; text-decoration:none; transition:background .2s,color .2s; }
-    .nav-cta:hover { background:var(--red); color:var(--dark); }
-
-    /* ─── MARQUEE ─── */
-    .marquee-bar { background:var(--red); overflow:hidden; padding:.7rem 0; position:relative; z-index:3; }
-    .marquee-inner { display:flex; gap:3rem; white-space:nowrap; animation:marqueeScroll 18s linear infinite; }
-    .marquee-inner span { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:.2em; color:var(--dark); }
-    .marquee-inner .dot { opacity:.5; }
-    @keyframes marqueeScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-
-    /* ─── ABOUT ─── */
-    .about { display:grid; grid-template-columns:1fr 1.4fr; gap:4rem; padding:8rem 6vw; position:relative; }
-    .section-tag { font-size:.75rem; letter-spacing:.25em; text-transform:uppercase; color:var(--cyan); margin-bottom:1rem; }
-    .about__heading { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,5vw,4.5rem); line-height:.95; letter-spacing:.02em; }
-    .about__heading em { font-style:normal; background:linear-gradient(135deg,var(--orange),var(--red)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .about__body { display:flex; flex-direction:column; justify-content:center; gap:1.5rem; }
-    .about__body p { font-size:clamp(.9rem,1.2vw,1.05rem); line-height:1.75; color:rgba(240,236,232,.65); }
-
-    /* ─── PROGRAM ─── */
-    .program { padding:8rem 6vw; background:var(--mid); }
-    .program__header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:4rem; }
-    .program__title { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,7vw,6rem); line-height:1; letter-spacing:.03em; }
-    .program__title em { display:block; font-style:normal; color:var(--orange); }
-    .program-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(255,255,255,.07); }
-    .program-card { background:var(--mid); padding:2.5rem 2rem; position:relative; overflow:hidden; transition:background .3s; }
-    .program-card:hover { background:rgba(255,255,255,.04); }
-    .program-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:0; background:linear-gradient(to bottom,var(--card-accent),transparent); transition:height .4s ease; }
-    .program-card:hover::before { height:100%; }
-    .program-card.c1{--card-accent:var(--red)} .program-card.c2{--card-accent:var(--cyan)} .program-card.c3{--card-accent:var(--orange)}
-    .program-card.c4{--card-accent:var(--pink)} .program-card.c5{--card-accent:var(--yellow)} .program-card.c6{--card-accent:var(--cyan)}
-    .card-icon { font-size:1.6rem; margin-bottom:1.2rem; display:block; }
-    .card-title { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.06em; margin-bottom:.6rem; }
-    .card-desc { font-size:.85rem; line-height:1.65; color:rgba(240,236,232,.5); }
-
-    /* ─── INFO STRIP ─── */
-    .info-strip { display:grid; grid-template-columns:repeat(3,1fr); background:var(--red); }
-    .info-item { padding:3rem 3vw; border-right:1px solid rgba(10,10,15,.2); display:flex; flex-direction:column; gap:.4rem; }
-    .info-item:last-child { border-right:none; }
-    .info-label { font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(10,10,15,.6); font-weight:500; }
-    .info-value { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.4rem,2.5vw,2rem); color:var(--dark); letter-spacing:.04em; line-height:1.1; }
-
-    /* ─── HIGHLIGHTS ─── */
-    .highlights { padding:8rem 6vw; display:grid; grid-template-columns:1.2fr 1fr; gap:6rem; align-items:center; }
-    .highlight-list { display:flex; flex-direction:column; }
-    .highlight-item { display:flex; align-items:flex-start; gap:1.5rem; padding:2rem 0; border-bottom:1px solid rgba(255,255,255,.07); cursor:default; transition:padding-left .3s; }
-    .highlight-item:hover { padding-left:.5rem; }
-    .highlight-num { font-family:'Bebas Neue',sans-serif; font-size:3rem; color:var(--red); line-height:1; flex-shrink:0; width:3rem; opacity:.5; transition:opacity .3s; }
-    .highlight-item:hover .highlight-num { opacity:1; }
-    .highlight-text h3 { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:.06em; margin-bottom:.4rem; }
-    .highlight-text p { font-size:.85rem; line-height:1.65; color:rgba(240,236,232,.5); }
-    .highlights__aside { display:flex; flex-direction:column; gap:2rem; }
-    .aside-badge { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); padding:2rem; position:relative; overflow:hidden; }
-    .aside-badge::after { content:''; position:absolute; top:0; right:0; width:80px; height:80px; background:var(--badge-color,var(--red)); opacity:.15; clip-path:polygon(100% 0,0 0,100% 100%); }
-    .aside-badge h4 { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:.08em; margin-bottom:.5rem; color:var(--badge-color,var(--red)); }
-    .aside-badge p { font-size:.85rem; line-height:1.6; color:rgba(240,236,232,.55); }
-    .aside-badge.b1{--badge-color:var(--cyan)} .aside-badge.b2{--badge-color:var(--orange)} .aside-badge.b3{--badge-color:var(--pink)}
-
-    /* ─── PARTNERS ─── */
-    .partners { padding:5rem 6vw; background:var(--mid); text-align:center; }
-    .partners h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.5rem,3vw,2.5rem); letter-spacing:.15em; margin-bottom:3rem; opacity:.4; }
-    .partners-row { display:flex; justify-content:center; align-items:center; gap:3rem; flex-wrap:wrap; }
-    .partner-chip { border:1px solid rgba(255,255,255,.12); padding:.8rem 2rem; font-size:.8rem; letter-spacing:.15em; text-transform:uppercase; color:rgba(240,236,232,.5); transition:border-color .3s,color .3s; }
-    .partner-chip:hover { border-color:var(--cyan); color:var(--cyan); }
-
-    /* ─── CTA ─── */
-    .cta-section { padding:10rem 6vw; text-align:center; position:relative; overflow:hidden; }
-    .cta-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(232,52,58,.15) 0%,transparent 70%); }
-    .cta-section h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,8vw,8rem); line-height:.9; letter-spacing:.02em; position:relative; }
-    .cta-section h2 span { display:block; }
-    .cta-section h2 .accent { background:linear-gradient(135deg,var(--orange),var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    .cta-free { margin-top:1.5rem; font-size:clamp(.9rem,1.5vw,1.1rem); letter-spacing:.2em; text-transform:uppercase; color:var(--cyan); position:relative; }
-    .cta-btn { display:inline-block; margin-top:3rem; padding:1.2rem 4rem; background:var(--red); color:var(--light); font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:.15em; text-decoration:none; position:relative; overflow:hidden; transition:transform .2s; }
-    .cta-btn::before { content:''; position:absolute; inset:0; background:var(--orange); transform:translateX(-100%); transition:transform .3s ease; }
-    .cta-btn:hover { transform:translateY(-2px); }
-    .cta-btn:hover::before { transform:translateX(0); }
-    .cta-btn span { position:relative; }
-
-    /* ─── FOOTER ─── */
-    footer { background:#060608; padding:2.5rem 6vw; display:flex; justify-content:space-between; align-items:center; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:rgba(240,236,232,.3); }
-    footer a { color:rgba(240,236,232,.3); text-decoration:none; transition:color .2s; }
-    footer a:hover { color:var(--cyan); }
-
-    /* ─── REVEAL ─── */
-    .reveal { opacity:0; transform:translateY(30px); transition:opacity .7s ease,transform .7s ease; }
-    .reveal.visible { opacity:1; transform:translateY(0); }
-    .reveal-delay-1{transition-delay:.1s} .reveal-delay-2{transition-delay:.2s} .reveal-delay-3{transition-delay:.3s}
-
-    /* ─── SAAT KULESİ (TAM ORTA ARKA PLAN) ─── */
+    /* ─── SAAT KULESİ ─── */
     .hero__clock {
       position: absolute;
       top: 31%;
-      left: -66%; /* Sayfanın tam ortası */
-      transform: translate(-50%, -50%); /* Hem yatay hem dikey olarak kusursuz merkezleme yapar */
-      width: 200vw; /* Boyutunu ayarlamak için bu değeri 30vw - 50vw arası değiştirebilirsin */
-      height: 90vh;
+      left: -66%;
+      transform: translate(-50%, -50%);
+      width: 200vw;
+      height: 90%;
       background-image: url('saatkule.png');
-      background-size: contain; /* Görselin orantısını bozmadan kutuya tam sığdırır */
+      background-size: contain;
       background-position: center center;
       background-repeat: no-repeat;
-      z-index: 1; /* Yazıların (z-index: 2) arkasında kalmasını sağlar */
+      z-index: 1;
       pointer-events: none;
-      opacity: 0.5; /* Arka planda daha soft/flu durması için saydamlığı düşürdük (0.1 ile 1 arası deneyebilirsin) */
+      opacity: 0.5;
       animation: floatPulse 8s ease-in-out infinite reverse;
     }
+    @keyframes floatPulse { 0%,100%{transform:translate(-50%,-50%) translateY(0)} 50%{transform:translate(-50%,-50%) translateY(-15px)} }
 
-    /* ─── RESPONSIVE ─── */
-    @media(max-width:900px){
-      nav{padding:1.2rem 2rem}
-      .nav-links{display:none}
-      .lang-switcher{right:2rem; top:1.2rem}
-      .hero{grid-template-columns:1fr;min-height:auto;padding-top:5rem}
-      .hero__right{display:none}
-      .hero__clock{display:none} /* Mobilde kule gizleniyor */
-      .about,.highlights{grid-template-columns:1fr;gap:3rem}
-      .program-grid{grid-template-columns:1fr 1fr}
-      .info-strip{grid-template-columns:1fr}
-      .info-item{border-right:none;border-bottom:1px solid rgba(10,10,15,.2)}
-      footer{flex-direction:column;gap:1rem;text-align:center}
+    /* ─── MARQUEE ─── */
+    .marquee-bar { background: var(--red); overflow: hidden; padding: .65rem 0; position: relative; z-index: 3; }
+    .marquee-inner { display: flex; gap: 3rem; white-space: nowrap; animation: marqueeScroll 18s linear infinite; }
+    .marquee-inner span { font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: .2em; color: var(--dark); }
+    .marquee-inner .dot { opacity: .5; }
+    @keyframes marqueeScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ─── ABOUT ─── */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 80px;
+      padding: 80px var(--side-pad);
+      position: relative;
     }
-    @media(max-width:600px){
-      .program-grid{grid-template-columns:1fr}
-      .partners-row{gap:1rem}
-    }
+    .section-tag { font-size: .72rem; letter-spacing: .25em; text-transform: uppercase; color: var(--cyan); margin-bottom: .8rem; }
+    .about__heading { font-family: 'Bebas Neue', sans-serif; font-size: 4.5rem; line-height: .95; letter-spacing: .02em; }
+    .about__heading em { font-style: normal; background: linear-gradient(135deg, var(--orange), var(--red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .about__body { display: flex; flex-direction: column; justify-content: center; gap: 1.2rem; }
+    .about__body p { font-size: 1rem; line-height: 1.75; color: rgba(240,236,232,.65); }
+
+    /* ─── PROGRAM ─── */
+    .program { padding: 80px var(--side-pad); background: var(--mid); }
+    .program__header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; }
+    .program__title { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; line-height: 1; letter-spacing: .03em; }
+    .program__title em { display: block; font-style: normal; color: var(--orange); }
+    .program-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: rgba(255,255,255,.07); }
+    .program-card { background: var(--mid); padding: 2rem 1.6rem; position: relative; overflow: hidden; transition: background .3s; }
+    .program-card:hover { background: rgba(255,255,255,.04); }
+    .program-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: linear-gradient(to bottom, var(--card-accent), transparent); transition: height .4s ease; }
+    .program-card:hover::before { height: 100%; }
+    .program-card.c1{--card-accent:var(--red)} .program-card.c2{--card-accent:var(--cyan)} .program-card.c3{--card-accent:var(--orange)}
+    .program-card.c4{--card-accent:var(--pink)} .program-card.c5{--card-accent:var(--yellow)} .program-card.c6{--card-accent:var(--cyan)}
+    .card-icon { font-size: 1.5rem; margin-bottom: 1rem; display: block; }
+    .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: .06em; margin-bottom: .5rem; }
+    .card-desc { font-size: .82rem; line-height: 1.6; color: rgba(240,236,232,.5); }
+
+    /* ─── INFO STRIP ─── */
+    .info-strip { display: grid; grid-template-columns: repeat(3,1fr); background: var(--red); }
+    .info-item { padding: 2.5rem var(--side-pad); border-right: 1px solid rgba(10,10,15,.2); display: flex; flex-direction: column; gap: .35rem; }
+    .info-item:last-child { border-right: none; }
+    .info-label { font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(10,10,15,.6); font-weight: 500; }
+    .info-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--dark); letter-spacing: .04em; line-height: 1.1; }
+
+    /* ─── HIGHLIGHTS ─── */
+    .highlights { padding: 80px var(--side-pad); display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; }
+    .highlight-list { display: flex; flex-direction: column; }
+    .highlight-item { display: flex; align-items: flex-start; gap: 1.5rem; padding: 1.6rem 0; border-bottom: 1px solid rgba(255,255,255,.07); cursor: default; transition: padding-left .3s; }
+    .highlight-item:hover { padding-left: .5rem; }
+    .highlight-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: var(--red); line-height: 1; flex-shrink: 0; width: 3rem; opacity: .5; transition: opacity .3s; }
+    .highlight-item:hover .highlight-num { opacity: 1; }
+    .highlight-text h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: .06em; margin-bottom: .35rem; }
+    .highlight-text p { font-size: .83rem; line-height: 1.65; color: rgba(240,236,232,.5); }
+    .highlights__aside { display: flex; flex-direction: column; gap: 1.6rem; }
+    .aside-badge { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); padding: 1.8rem; position: relative; overflow: hidden; }
+    .aside-badge::after { content: ''; position: absolute; top: 0; right: 0; width: 80px; height: 80px; background: var(--badge-color, var(--red)); opacity: .15; clip-path: polygon(100% 0,0 0,100% 100%); }
+    .aside-badge h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: .08em; margin-bottom: .45rem; color: var(--badge-color, var(--red)); }
+    .aside-badge p { font-size: .83rem; line-height: 1.6; color: rgba(240,236,232,.55); }
+    .aside-badge.b1{--badge-color:var(--cyan)} .aside-badge.b2{--badge-color:var(--orange)} .aside-badge.b3{--badge-color:var(--pink)}
+
+    /* ─── PARTNERS ─── */
+    .partners { padding: 4rem var(--side-pad); background: var(--mid); text-align: center; }
+    .partners h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: .15em; margin-bottom: 2.5rem; opacity: .4; }
+    .partners-row { display: flex; justify-content: center; align-items: center; gap: 2.5rem; flex-wrap: wrap; }
+    .partner-chip { border: 1px solid rgba(255,255,255,.12); padding: .75rem 2rem; font-size: .78rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(240,236,232,.5); transition: border-color .3s, color .3s; }
+    .partner-chip:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    /* ─── CTA ─── */
+    .cta-section { padding: 7rem var(--side-pad); text-align: center; position: relative; overflow: hidden; }
+    .cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(232,52,58,.15) 0%, transparent 70%); }
+    .cta-section h2 { font-family: 'Bebas Neue', sans-serif; font-size: 8rem; line-height: .9; letter-spacing: .02em; position: relative; }
+    .cta-section h2 span { display: block; }
+    .cta-section h2 .accent { background: linear-gradient(135deg, var(--orange), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .cta-free { margin-top: 1.2rem; font-size: 1rem; letter-spacing: .2em; text-transform: uppercase; color: var(--cyan); position: relative; }
+    .cta-btn { display: inline-block; margin-top: 2.5rem; padding: 1.1rem 4rem; background: var(--red); color: var(--light); font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem; letter-spacing: .15em; text-decoration: none; position: relative; overflow: hidden; transition: transform .2s; }
+    .cta-btn::before { content: ''; position: absolute; inset: 0; background: var(--orange); transform: translateX(-100%); transition: transform .3s ease; }
+    .cta-btn:hover { transform: translateY(-2px); }
+    .cta-btn:hover::before { transform: translateX(0); }
+    .cta-btn span { position: relative; }
+
+    /* ─── FOOTER ─── */
+    footer { background: #060608; padding: 2rem var(--side-pad); display: flex; justify-content: space-between; align-items: center; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(240,236,232,.3); }
+    footer a { color: rgba(240,236,232,.3); text-decoration: none; transition: color .2s; }
+    footer a:hover { color: var(--cyan); }
+
+    /* ─── REVEAL ─── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1{transition-delay:.1s} .reveal-delay-2{transition-delay:.2s} .reveal-delay-3{transition-delay:.3s}
   </style>
 </head>
 <body class="lang-tr">
@@ -356,9 +372,9 @@
     </a>
   </nav>
 
+  <!-- ── HERO 1920×900 ── -->
   <section class="hero">
     <div class="hero__bg"></div>
-    
     <div class="hero__clock"></div>
 
     <div class="hero__left">
@@ -379,16 +395,17 @@
         <div class="meta-row" data-lang="en">🎟 <em>Free</em> Admission</div>
       </div>
     </div>
+
     <div class="hero__right">
       <div class="orb orb-1"></div><div class="orb orb-2"></div>
       <div class="orb orb-3"></div><div class="orb orb-4"></div>
       <div class="face-container">
-        <div class="face-silhouette">
-          </div>
+        <div class="face-silhouette"></div>
       </div>
     </div>
   </section>
 
+  <!-- MARQUEE TR -->
   <div class="marquee-bar" data-lang="tr" aria-hidden="true">
     <div class="marquee-inner">
       <span>AI VIDEO FEST</span><span class="dot">◆</span><span>17 NİSAN</span><span class="dot">◆</span>
@@ -401,6 +418,7 @@
       <span>GÖSTERIMLER</span><span class="dot">◆</span><span>AR / VR</span><span class="dot">◆</span>
     </div>
   </div>
+  <!-- MARQUEE EN -->
   <div class="marquee-bar" data-lang="en" aria-hidden="true">
     <div class="marquee-inner">
       <span>AI VIDEO FEST</span><span class="dot">◆</span><span>APRIL 17</span><span class="dot">◆</span>
@@ -414,6 +432,7 @@
     </div>
   </div>
 
+  <!-- ABOUT -->
   <section class="about" id="about">
     <div class="reveal">
       <p class="section-tag">
@@ -426,17 +445,18 @@
     <div class="about__body reveal reveal-delay-1">
       <div data-lang="tr">
         <p>YU AI Video Fest; yapay zeka destekli video üretiminin yaratıcı endüstrilerde açtığı yeni ufukları keşfetmek için teknoloji uzmanlarını, sinemacıları, eğitimcileri ve öğrencileri bir araya getiriyor.</p>
-        <p style="margin-top:1.5rem">Yaşar Üniversitesi Yeni Medya ve İletişim Bölümü ile UrlaDAM iş birliğiyle düzenlenen festival; panel, atölye ve gösterimler aracılığıyla yapay zekanın reklamcılık, sinema ve yaratıcı üretim üzerindeki etkisini masaya yatırıyor.</p>
-        <p style="margin-top:1.5rem">İzmir İnovasyon Platformu ve İzmir Büyükşehir Belediyesi'nin desteğiyle gerçekleşen etkinlikte, genç yaratıcıları teşvik eden ödüller ve ilham verici networking fırsatları da yer alıyor.</p>
+        <p style="margin-top:1.2rem">Yaşar Üniversitesi Yeni Medya ve İletişim Bölümü ile UrlaDAM iş birliğiyle düzenlenen festival; panel, atölye ve gösterimler aracılığıyla yapay zekanın reklamcılık, sinema ve yaratıcı üretim üzerindeki etkisini masaya yatırıyor.</p>
+        <p style="margin-top:1.2rem">İzmir İnovasyon Platformu ve İzmir Büyükşehir Belediyesi'nin desteğiyle gerçekleşen etkinlikte, genç yaratıcıları teşvik eden ödüller ve ilham verici networking fırsatları da yer alıyor.</p>
       </div>
       <div data-lang="en">
         <p>The YU AI Video Fest explores the new frontiers that AI-powered video production is opening up in the creative industries — bringing together technologists, filmmakers, educators, and students for a full day of discovery.</p>
-        <p style="margin-top:1.5rem">Organized in collaboration with Yaşar University's Department of New Media and Communication and UrlaDAM, the festival examines the impact of AI on advertising, cinema, and creative production through panels, workshops, and screenings.</p>
-        <p style="margin-top:1.5rem">With support from the İzmir Innovation Platform and the İzmir Metropolitan Municipality, the day features awards designed to encourage young creators alongside inspiring networking opportunities.</p>
+        <p style="margin-top:1.2rem">Organized in collaboration with Yaşar University's Department of New Media and Communication and UrlaDAM, the festival examines the impact of AI on advertising, cinema, and creative production through panels, workshops, and screenings.</p>
+        <p style="margin-top:1.2rem">With support from the İzmir Innovation Platform and the İzmir Metropolitan Municipality, the day features awards designed to encourage young creators alongside inspiring networking opportunities.</p>
       </div>
     </div>
   </section>
 
+  <!-- INFO STRIP -->
   <div class="info-strip">
     <div class="info-item">
       <span class="info-label"><span data-lang="tr">Tarih</span><span data-lang="en">Date</span></span>
@@ -452,6 +472,7 @@
     </div>
   </div>
 
+  <!-- PROGRAM -->
   <section class="program" id="program">
     <div class="program__header reveal">
       <div>
@@ -496,9 +517,10 @@
     </div>
   </section>
 
+  <!-- HIGHLIGHTS -->
   <section class="highlights" id="highlights">
     <div class="highlight-list reveal">
-      <p class="section-tag" style="margin-bottom:2rem">
+      <p class="section-tag" style="margin-bottom:1.6rem">
         <span data-lang="tr">Neden Katılmalısın</span>
         <span data-lang="en">Why Attend</span>
       </p>
@@ -547,6 +569,7 @@
     </div>
   </section>
 
+  <!-- PARTNERS -->
   <section class="partners" id="partners">
     <h2 class="reveal">
       <span data-lang="tr">Paydaşlar &amp; Organizatörler</span>
@@ -561,6 +584,7 @@
     </div>
   </section>
 
+  <!-- CTA -->
   <section class="cta-section" id="cta">
     <h2 class="reveal">
       <span data-lang="tr">Bize Katıl</span>
@@ -577,14 +601,13 @@
     </a>
   </section>
 
-<footer>
+  <footer>
     <span>© 2026 YU AI Video Fest</span>
     <span>UrlaDAM · İzmir · Türkiye</span>
     <a href="https://www.instagram.com/yu_aivideofest_official/" target="_blank">yu_aivideofest_official</a>
   </footer>
 
   <script>
-    // ── Language switcher ──
     function setLang(lang) {
       document.body.className = 'lang-' + lang;
       document.getElementById('btn-tr').classList.toggle('active', lang === 'tr');
@@ -592,13 +615,8 @@
       document.documentElement.lang = lang;
       try { localStorage.setItem('yufest-lang', lang); } catch(e){}
     }
-    // Restore saved preference
-    try {
-      const saved = localStorage.getItem('yufest-lang');
-      if (saved === 'en') setLang('en');
-    } catch(e){}
+    try { const s = localStorage.getItem('yufest-lang'); if (s === 'en') setLang('en'); } catch(e){}
 
-    // ── Custom cursor ──
     const cursor = document.getElementById('cursor');
     document.addEventListener('mousemove', e => {
       cursor.style.left = e.clientX + 'px';
@@ -609,14 +627,12 @@
       el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
     });
 
-    // ── Scroll reveal ──
     const revealEls = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
     }, { threshold: 0.12 });
     revealEls.forEach(el => io.observe(el));
 
-    // ── Hero date entrance ──
     document.querySelectorAll('.date-num').forEach((el, i) => {
       el.style.opacity = '0';
       el.style.transform = 'translateX(-30px)';
